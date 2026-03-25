@@ -20,7 +20,7 @@ public class TwistedShadows : ModuleRules
 			"GameplayStateTreeModule",
 			"Niagara",
 			"UMG",
-			"Slate"
+			"Slate", "MassEntity"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
