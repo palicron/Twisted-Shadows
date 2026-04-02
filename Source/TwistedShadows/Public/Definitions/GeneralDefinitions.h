@@ -8,6 +8,9 @@ enum class ETS_ActivationState : uint8
 {
 	None,
 	Activated,
+	Activating,
+	Deactivating,
 	Deactivated,
 	Disabled
 };
+

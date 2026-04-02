@@ -29,6 +29,9 @@ protected:
 	UBoxComponent* OverlapComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UTS_ActivatorComponent> ActivatorComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float MinWeightToActivate;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
@@ -36,6 +39,8 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	uint8 bUseWeightToActivate : 1;
+	
+	TArray<AActor*> OverlappingActors;
 	
 	virtual void BeginPlay() override;
 	
@@ -45,17 +50,19 @@ protected:
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_ActivatePlate() const;
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_DeactivatePlate();
+	
 #pragma region ITS_Activatable
 
 public:
 	
-	virtual void ActivateActivatableActors_Implementation() override;
-	
-	virtual void DeactivateActivatableActors_Implementation() override;
-	
 	virtual bool IsActivatableActorEnabled_Implementation() const override;
 	
-	virtual TArray<TScriptInterface<ITS_Activatable>> GetActivatableActors_Implementation() const override;
+	virtual UTS_ActivatorComponent* GetActivatorComponent_Implementation() const override;
 	
 #pragma endregion ITS_Activatable
 	

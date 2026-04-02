@@ -4,8 +4,9 @@
 #include "Activators/TS_PressurePlate.h"
 
 #include "Components/BoxComponent.h"
+#include "Interfaces/TS_Activatable.h"
 
-// Sets default values
+//-------------------------------------------------------------------------------------------------------------------------------------------
 ATS_PressurePlate::ATS_PressurePlate()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -20,10 +21,11 @@ ATS_PressurePlate::ATS_PressurePlate()
 	bIsActivate = false;
 	bUseWeightToActivate = true;
 	MinWeightToActivate = 1.f;
+	
+	ActivatorComponent = CreateDefaultSubobject<UTS_ActivatorComponent>(TEXT("Activator Component"));
 }
 
-
-// Called when the game starts or when spawned
+//-------------------------------------------------------------------------------------------------------------------------------------------
 void ATS_PressurePlate::BeginPlay()
 {
 	Super::BeginPlay();
@@ -32,43 +34,54 @@ void ATS_PressurePlate::BeginPlay()
 	OverlapComponent->OnComponentEndOverlap.AddDynamic(this, &ATS_PressurePlate::OnOverlapEnd);
 }
 
-// Called every frame
+//-------------------------------------------------------------------------------------------------------------------------------------------
 void ATS_PressurePlate::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-void ATS_PressurePlate::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+//-------------------------------------------------------------------------------------------------------------------------------------------
+void ATS_PressurePlate::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                                       const FHitResult& SweepResult)
 {
-	if(GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Begin Overlap"));	
+	if (bIsActivate)
+	{
+		return;
+	}
+	
+	bIsActivate = true;
+	
+	OverlappingActors.AddUnique(OtherActor);
+	ActivatorComponent->ActivateActors();
+	
+	BP_ActivatePlate();
 }
 
+//-------------------------------------------------------------------------------------------------------------------------------------------
 void ATS_PressurePlate::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if(GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("End Overlap"));	
+	if (OverlappingActors.Contains(OtherActor))
+	{
+		OverlappingActors.Remove(OtherActor);
+	}
+
+	if (OverlappingActors.Num() == 0)
+	{
+		bIsActivate = false;
+		ActivatorComponent->DeActivateActors();
+		BP_DeactivatePlate();
+	}
 }
 
-
-void ATS_PressurePlate::ActivateActivatableActors_Implementation()
-{
-	ITS_Activator::ActivateActivatableActors_Implementation();
-}
-
-void ATS_PressurePlate::DeactivateActivatableActors_Implementation()
-{
-	ITS_Activator::DeactivateActivatableActors_Implementation();
-}
-
+//-------------------------------------------------------------------------------------------------------------------------------------------
 bool ATS_PressurePlate::IsActivatableActorEnabled_Implementation() const
 {
-	return ITS_Activator::IsActivatableActorEnabled_Implementation();
+	return bIsActivate;
 }
 
-TArray<TScriptInterface<ITS_Activatable>> ATS_PressurePlate::GetActivatableActors_Implementation() const
+//---------------------------------------------------------------------------------------------------------------------------------------------
+UTS_ActivatorComponent* ATS_PressurePlate::GetActivatorComponent_Implementation() const
 {
-	return ITS_Activator::GetActivatableActors_Implementation();
+	return ActivatorComponent;
 }
 

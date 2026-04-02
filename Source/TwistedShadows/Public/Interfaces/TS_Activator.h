@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Component/Activator/TS_ActivatorComponent.h"
 #include "UObject/Interface.h"
 #include "TS_Activator.generated.h"
 
@@ -26,17 +27,11 @@ class TWISTEDSHADOWS_API ITS_Activator
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	TArray<TScriptInterface<ITS_Activatable>> GetActivatableActors() const;
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ActivateActivatableActors();
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void DeactivateActivatableActors();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool IsActivatableActorEnabled() const;
-	
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UTS_ActivatorComponent* GetActivatorComponent() const;
 };
 	
