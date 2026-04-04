@@ -3,10 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Components/ActorComponent.h"
+#include "Definitions/GeneralDefinitions.h"
 #include "TS_ActivatorComponent.generated.h"
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActivationStateChangedSignature, const FActivationPayload&, Payload);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TWISTEDSHADOWS_API UTS_ActivatorComponent : public UActorComponent
 {
@@ -17,14 +20,24 @@ public:
 	UTS_ActivatorComponent();
 
 protected:
-
-	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Activation")
+	TArray<FGameplayTag> ActivationTags;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Activation")
+	TArray<FGameplayTag> DeactivationTags;
 
 public:	
 	
+	UPROPERTY(BlueprintAssignable)
+	FOnActivationStateChangedSignature OnActivationDelegate;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnActivationStateChangedSignature OnDeactivationDelegate;
+	
 	UFUNCTION(BlueprintCallable)
-	virtual void ActivateActors();
+	virtual void ActivateActors(AActor* Instigator = nullptr);
 
 	UFUNCTION(BlueprintCallable)
-	virtual void DeActivateActors();
+	virtual void DeActivateActors(AActor* Instigator = nullptr);
 };

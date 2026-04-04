@@ -3,27 +3,43 @@
 
 #include "Component/Activator/TS_ActivatorComponent.h"
 
+#include "Definitions/GeneralDefinitions.h"
+
 
 UTS_ActivatorComponent::UTS_ActivatorComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-
-void UTS_ActivatorComponent::BeginPlay()
+void UTS_ActivatorComponent::ActivateActors(AActor* Instigator)
 {
-	Super::BeginPlay();
+	FActivationPayload Payload;
+
+	Payload.Instigator = Instigator;
+	Payload.InstigatorActivator = GetOwner();
+	Payload.ActivationTime = GetWorld()->GetTimeSeconds();
+
+	for (FGameplayTag ActivationTag : ActivationTags)
+	{
+		Payload.ActivationTags.AddTag(ActivationTag);
+	}
+
+	OnActivationDelegate.Broadcast(Payload);
 }
 
-void UTS_ActivatorComponent::ActivateActors()
+void UTS_ActivatorComponent::DeActivateActors(AActor* Instigator)
 {
-	if(GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Activate!"));	
-}
+	FActivationPayload Payload;
 
-void UTS_ActivatorComponent::DeActivateActors()
-{
-	if(GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Deactivate!"));	
+	Payload.Instigator = Instigator;
+	Payload.InstigatorActivator = GetOwner();
+	Payload.ActivationTime = GetWorld()->GetTimeSeconds();
+
+	for (FGameplayTag ActivationTag : DeactivationTags)
+	{
+		Payload.ActivationTags.AddTag(ActivationTag);
+	}
+
+	OnDeactivationDelegate.Broadcast(Payload);
 }
 
