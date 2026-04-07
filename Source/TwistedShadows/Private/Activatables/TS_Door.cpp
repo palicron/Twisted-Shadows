@@ -18,6 +18,8 @@ ATS_Door::ATS_Door()
 	ClosePositionTarget = CreateDefaultSubobject<USceneComponent>(TEXT("Close Position Target"));
 	
 	DoorState = ETS_ActivationState::Deactivated;
+	
+	ActivatableComponent = CreateDefaultSubobject<UTS_ActivatableComponent>(TEXT("Activatable Component"));
 }
 
 void ATS_Door::BeginPlay()
@@ -36,10 +38,12 @@ void ATS_Door::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ATS_Door::ActivateActor_Implementation()
+void ATS_Door::ActivateActor_Implementation(FActivationPayload Payload)
 {
 	//TODO this shoudl be a timelein fo rtth emomento is just set 
 	
+	if(GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("ACtivate"));	
 	if (DoorState == ETS_ActivationState::Deactivated)
 	{
 		DoorState = ETS_ActivationState::Activated;
@@ -54,7 +58,7 @@ void ATS_Door::ActivateActor_Implementation()
 	OnDoorStateChangedDelegate.Broadcast(DoorState);
 }
 
-void ATS_Door::DeactivateActor_Implementation()
+void ATS_Door::DeactivateActor_Implementation(FActivationPayload Payload)
 {
 	if (DoorState == ETS_ActivationState::Deactivated)
 	{
@@ -73,5 +77,10 @@ ETS_ActivationState ATS_Door::GetActivationState_Implementation() const
 int32 ATS_Door::GetActivationPhase_Implementation() const
 {
 	return ITS_Activatable::GetActivationPhase_Implementation();
+}
+
+UTS_ActivatableComponent* ATS_Door::GetActivatableComponent_Implementation() const
+{
+	return ActivatableComponent;
 }
 

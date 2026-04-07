@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interfaces/TS_Activatable.h"
+#include "Public/Component/Activatable/TS_ActivatableComponent.h"
 #include "TS_Door.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDoorStateChangedSignature, ETS_ActivationState, NewSate);
@@ -24,6 +25,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnDoorStateChangedSignature OnDoorStateChangedDelegate;
 protected:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UTS_ActivatableComponent> ActivatableComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	USceneComponent* OpenPositionTarget;
@@ -46,9 +50,10 @@ protected:
 
 #pragma region ITS_Activatable
 	
-	virtual void ActivateActor_Implementation() override;
-	virtual void DeactivateActor_Implementation() override;
+	virtual void ActivateActor_Implementation(FActivationPayload Payload) override;
+	virtual void DeactivateActor_Implementation(FActivationPayload Payload) override;
 	virtual ETS_ActivationState GetActivationState_Implementation() const override;
 	virtual int32 GetActivationPhase_Implementation() const override;
+	virtual UTS_ActivatableComponent* GetActivatableComponent_Implementation() const override;
 #pragma endregion ITS_Activatable
 };

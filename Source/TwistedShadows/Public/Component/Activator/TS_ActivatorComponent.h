@@ -9,7 +9,7 @@
 #include "TS_ActivatorComponent.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActivationStateChangedSignature, const FActivationPayload&, Payload);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActivationStateChangedSignature, FActivationPayload, Payload);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TWISTEDSHADOWS_API UTS_ActivatorComponent : public UActorComponent
 {
