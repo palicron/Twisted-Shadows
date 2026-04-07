@@ -35,8 +35,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Activation|Conditions")
 	TArray<FGameplayTag> RequiredTags;
 	
-	//TODO ENFORECE INTERFACE
-	//UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Activation|Activators", meta = (MustImplement = "TS_Activatable"))
+	
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Activation|Activators", meta = (MustImplement = "/Script/TwistedShadows.TS_Activator"))
 	TArray<AActor*> ActorActivators;
 	
 	virtual void BeginPlay() override;

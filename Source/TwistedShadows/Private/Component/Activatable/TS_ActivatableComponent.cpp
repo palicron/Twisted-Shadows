@@ -16,9 +16,9 @@ void UTS_ActivatableComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	for (TScriptInterface<ITS_Activator>& Activator : ActorActivators)
+	for (const AActor* Activator : ActorActivators)
 	{
-		if (UTS_ActivatorComponent* ActivatorComponent = Activator->GetActivatorComponent())
+		if (UTS_ActivatorComponent* ActivatorComponent = ITS_Activator::Execute_GetActivatorComponent(Activator))
 		{
 			ActivatorComponent->OnActivationDelegate.AddUniqueDynamic(this, &UTS_ActivatableComponent::ActivateActor);
 			ActivatorComponent->OnDeactivationDelegate.AddUniqueDynamic(this, &UTS_ActivatableComponent::DeactivateActor);
