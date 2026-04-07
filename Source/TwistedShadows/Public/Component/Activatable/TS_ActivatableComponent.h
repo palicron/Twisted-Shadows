@@ -35,6 +35,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Activation|Conditions")
 	TArray<FGameplayTag> RequiredTags;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Activation|Conditions")
+	TArray<FGameplayTag> RequiredDeactivationTags;
 	
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Activation|Activators", meta = (MustImplement = "/Script/TwistedShadows.TS_Activator"))
 	TArray<AActor*> ActorActivators;

@@ -41,7 +41,7 @@ void UTS_ActivatableComponent::ActivateActor(FActivationPayload Payload)
 		}
 	}
 
-	if (!GetOwner() || !GetOwner()->IsA<UTS_Activatable>())
+	if (!GetOwner() || !GetOwner()->Implements<UTS_Activatable>())
 	{
 		//UE_LOG(LogTwistedShadows, Error, TEXT("Owner of %s is not an activatable"), *GetName());
 		return;
@@ -52,6 +52,21 @@ void UTS_ActivatableComponent::ActivateActor(FActivationPayload Payload)
 
 void UTS_ActivatableComponent::DeactivateActor(FActivationPayload Payload)
 {
+	for (const FGameplayTag& RequiredTag : RequiredDeactivationTags)
+	{
+		if (!Payload.ActivationTags.HasTagExact(RequiredTag))
+		{
+			return;
+		}
+	}
+	
+	if (!GetOwner() || !GetOwner()->Implements<UTS_Activatable>())
+	{
+		//UE_LOG(LogTwistedShadows, Error, TEXT("Owner of %s is not an activatable"), *GetName());
+		return;
+	}
+	
+	ITS_Activatable::Execute_DeactivateActor(GetOwner(), Payload);
 }
 
 
