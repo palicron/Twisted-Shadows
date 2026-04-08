@@ -34,4 +34,47 @@ struct FActivationPayload
 	
 };
 
+USTRUCT(BlueprintType)
+struct FLevelDefinition 
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 LevelID;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FText LevelName;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FText LevelDescription;
+	
+	UPROPERTY(EditDefaultsOnly)
+	TSoftObjectPtr<UWorld> LevelAsset; 
+};
+
+USTRUCT(BlueprintType)
+struct FLevelProgress       
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 LevelID;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FText LevelName;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FText LevelDescription;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSoftObjectPtr<UWorld> LevelAsset; 
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	uint8 bIsAlreadyFinish : 1;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float BestFinishTime;
+};
+
+
 
