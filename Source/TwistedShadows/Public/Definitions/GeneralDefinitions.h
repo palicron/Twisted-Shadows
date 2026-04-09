@@ -74,6 +74,16 @@ struct FLevelProgress
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float BestFinishTime;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float LastFinishTime;
+	
+	int32 LevelHighScore;
+
+
+	FLevelProgress() : LevelID(0), bIsAlreadyFinish(false), BestFinishTime(0.f), LastFinishTime(0.f), LevelHighScore(0.f)
+	{
+	};
 };
 
 
