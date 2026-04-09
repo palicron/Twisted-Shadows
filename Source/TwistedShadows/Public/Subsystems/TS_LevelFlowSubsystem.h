@@ -35,9 +35,16 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	FLevelProgress GetLevelProgressInfo(const int32 LevelID,bool& bFindInfo) const;
+
 protected:
 	
+	int32 CurrentLevelID;
+	int32 LastLevelID;
+	
 	TMap<int32, FLevelProgress> Levels;
+
+	
+	void OnWorldReady(UWorld* World, const UWorld::InitializationValues);
 	
 	
 };

@@ -25,13 +25,26 @@ void UTS_LevelFlowSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 			}
 		}
 	}
+	
+	FWorldDelegates::OnPostWorldInitialization.AddUObject(this,&UTS_LevelFlowSubsystem::OnWorldReady);
 }
+
 void UTS_LevelFlowSubsystem::LoadLevel(const int32 LevelID)
 {
+	if (!Levels.Contains(LevelID) || !Levels[LevelID].LevelAsset.ToSoftObjectPath().IsValid())
+	{
+		return;
+	}
+
+	LastLevelID = CurrentLevelID;
+	CurrentLevelID = Levels[LevelID].LevelID;
+	//TODO REMEVER NEED A FADE 
+	UGameplayStatics::OpenLevelBySoftObjectPtr(GetWorld(), Levels[LevelID].LevelAsset, true);
 }
 
 void UTS_LevelFlowSubsystem::LoadNextLevel()
 {
+	
 }
 
 void UTS_LevelFlowSubsystem::LoadMainMenu()
@@ -52,4 +65,13 @@ FLevelProgress UTS_LevelFlowSubsystem::GetLevelProgressInfo(const int32 LevelID,
 
 	bFindInfo = true;
 	return Levels[LevelID];
+}
+
+void UTS_LevelFlowSubsystem::OnWorldReady(UWorld* World, const UWorld::InitializationValues)
+{
+	if (World && World->IsGameWorld())
+	{
+		if(GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("WORLD IS READY!"));	
+	}
 }
