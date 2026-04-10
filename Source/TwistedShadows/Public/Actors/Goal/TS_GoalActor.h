@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "TS_GoalActor.generated.h"
 
+class UTS_LevelFlowSubsystem;
 class USphereComponent;
 
 UCLASS()
@@ -19,6 +20,8 @@ public:
 
 protected:
 
+	TWeakObjectPtr<UTS_LevelFlowSubsystem> FlowSubsystem;
+	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Components")
 	uint8 bCanBeActivate : 1;
 	

@@ -4,6 +4,8 @@
 #include "Actors/Goal/TS_GoalActor.h"
 
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Subsystems/TS_LevelFlowSubsystem.h"
 
 
 ATS_GoalActor::ATS_GoalActor()
@@ -26,17 +28,22 @@ void ATS_GoalActor::BeginPlay()
 	Super::BeginPlay();
 	
 	PlayerDetectionSphere->OnComponentBeginOverlap.AddDynamic(this,&ATS_GoalActor::OnDetectorBeginOverlap);
+	FlowSubsystem = GetGameInstance()->GetSubsystem<UTS_LevelFlowSubsystem>();
+	
 }
 
 void ATS_GoalActor::OnDetectorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!bCanBeActivate)
+	if (!bCanBeActivate || !FlowSubsystem.IsValid())
 	{
 		return;
 	}
 	
+	FlowSubsystem->LoadNextLevel();
 	if(GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Goal ACtor"));	
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Goal ACtor"));
+	
+	
 	
 }
 

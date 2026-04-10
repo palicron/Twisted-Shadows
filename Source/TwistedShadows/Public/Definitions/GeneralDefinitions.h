@@ -43,6 +43,12 @@ struct FLevelDefinition
 	int32 LevelID;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 PreviousLevelID;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 NextLevelID;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText LevelName;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -59,6 +65,12 @@ struct FLevelProgress
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int32 LevelID;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 PreviousLevelID;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 NextLevelID;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText LevelName;
@@ -81,7 +93,7 @@ struct FLevelProgress
 	int32 LevelHighScore;
 
 
-	FLevelProgress() : LevelID(0), bIsAlreadyFinish(false), BestFinishTime(0.f), LastFinishTime(0.f), LevelHighScore(0.f)
+	FLevelProgress() : LevelID(0), PreviousLevelID(0), NextLevelID(0), bIsAlreadyFinish(false), BestFinishTime(0.f), LastFinishTime(0.f), LevelHighScore(0.f)
 	{
 	};
 };
