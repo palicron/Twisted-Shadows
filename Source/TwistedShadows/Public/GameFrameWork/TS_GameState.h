@@ -6,6 +6,8 @@
 #include "GameFramework/GameState.h"
 #include "TS_GameState.generated.h"
 
+class UMVVM_LevelFlow;
+class UTS_Widget;
 /**
  * 
  */
@@ -17,12 +19,19 @@ class TWISTEDSHADOWS_API ATS_GameState : public AGameState
 public:
 	
 	ATS_GameState();
+	
+	UFUNCTION(BlueprintCallable)
+	UMVVM_LevelFlow* GetLevelFlowViewModel() const { return LevelFlowViewModel; }
+	
 protected:
 	
 	float StartDelayTime;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly,Category= "Level Time")
 	float LevelInitialTime;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly,Category= "Level Time")
+	float LevelTimerTickDelay;
 	
 	float LevelEndTime;
 	
@@ -32,12 +41,15 @@ protected:
 	
 	float TotalPausedTime;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly,Category= "Level Time")
-	float LevelTimerTickDelay;
-	
 	FTimerHandle InitLevelTimerHandle;
 	
 	FTimerHandle LevelTimerHandle;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly,Category= "UI | View Model")
+	TSubclassOf<UMVVM_LevelFlow> LevelFlowViewModelClass;
+	
+	UPROPERTY()
+	TObjectPtr<UMVVM_LevelFlow> LevelFlowViewModel;
 	
 	virtual void BeginPlay() override;
 	

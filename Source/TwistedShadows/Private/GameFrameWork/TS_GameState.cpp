@@ -3,6 +3,8 @@
 
 #include "GameFrameWork/TS_GameState.h"
 
+#include "UI/ViewModel/MVVM_LevelFlow.h"
+
 ATS_GameState::ATS_GameState()
 {
 	StartDelayTime = 3.f;
@@ -19,6 +21,12 @@ void ATS_GameState::BeginPlay()
 	if (GetWorld())
 	{
 		GetWorld()->GetTimerManager().SetTimer(InitLevelTimerHandle,this,&ATS_GameState::StartLevelTimer,StartDelayTime,false);
+	}
+	
+	if (IsValid(LevelFlowViewModelClass))
+	{
+		LevelFlowViewModel = NewObject<UMVVM_LevelFlow>(this, LevelFlowViewModelClass);
+		LevelFlowViewModel->SetLevelTimeInSeconds(0.f);
 	}
 }
 
@@ -58,9 +66,10 @@ void ATS_GameState::EndLevelTimer()
 void ATS_GameState::LevelTimerTick()
 {
 	LevelTimer = GetWorld()->GetTimeSeconds() - LevelInitialTime - TotalPausedTime;
-	//TODO NEED TO UPDATE THE MODEL
 	
-	if(GEngine)
-		GEngine->AddOnScreenDebugMessage(55, 15.0f, FColor::Yellow, 
-			FString::Printf(TEXT("Current Time: %f"), LevelTimer));
+	if (LevelFlowViewModel)
+	{
+		LevelFlowViewModel->SetLevelTimeInSeconds(LevelTimer);
+	}
+
 }
