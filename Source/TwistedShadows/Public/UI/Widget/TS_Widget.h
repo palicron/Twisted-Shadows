@@ -13,5 +13,4 @@ UCLASS()
 class TWISTEDSHADOWS_API UTS_Widget : public UUserWidget
 {
 	GENERATED_BODY()
-	
 };

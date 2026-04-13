@@ -44,7 +44,7 @@ void UTS_LevelFlowSubsystem::LoadLevel(const int32 LevelID)
 
 	LastLevelID = CurrentLevelID;
 	CurrentLevelID = Levels[LevelID].LevelID;
-	//TODO REMEVER NEED A FADE 
+	//TODO REMEVER NEED A FADE and save game 
 	UGameplayStatics::OpenLevelBySoftObjectPtr(GetWorld(), Levels[LevelID].LevelAsset, true);
 }
 

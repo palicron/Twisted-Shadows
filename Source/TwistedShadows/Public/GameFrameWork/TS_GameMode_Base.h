@@ -14,4 +14,9 @@ class TWISTEDSHADOWS_API ATS_GameMode_Base : public AGameMode
 {
 	GENERATED_BODY()
 	
+public:
+	
+	UFUNCTION(BlueprintCallable)
+	void EndLevel(ACharacter* EndPlayer);
+	
 };

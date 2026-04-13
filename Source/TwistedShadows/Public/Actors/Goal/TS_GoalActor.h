@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "TS_GoalActor.generated.h"
 
+class ATS_GameMode_Base;
 class UTS_LevelFlowSubsystem;
 class USphereComponent;
 
@@ -19,6 +20,8 @@ public:
 	ATS_GoalActor();
 
 protected:
+	
+	TWeakObjectPtr<ATS_GameMode_Base> GameModePtr;
 
 	TWeakObjectPtr<UTS_LevelFlowSubsystem> FlowSubsystem;
 	
