@@ -6,6 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "TS_PlayerHUD.generated.h"
 
+class UTS_EndLevelWidget;
 class UTS_Widget;
 /**
  * 
@@ -20,6 +21,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UTS_Widget* GetPlayerHUDWidget() const { return PlayerHUDWidget;};
 	
+	UFUNCTION(BlueprintCallable)
+	void DisplayEndLevelWidget();
 protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Widget")
@@ -27,6 +30,12 @@ protected:
 	
 	UPROPERTY()
 	TObjectPtr<UTS_Widget> PlayerHUDWidget;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Widget")
+	TSubclassOf<UTS_EndLevelWidget> EndLevelWidgetClass;
+	
+	UPROPERTY()
+	TObjectPtr<UTS_EndLevelWidget> EndLevelWidget;
 	
 	virtual void BeginPlay() override;
 };

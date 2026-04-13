@@ -23,6 +23,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UMVVM_LevelFlow* GetLevelFlowViewModel() const { return LevelFlowViewModel; }
 	
+	UFUNCTION(blueprintCallable)
+	virtual void StartLevelTimer();
+	
+	UFUNCTION(blueprintCallable)
+	virtual void ResumeLevelTimer();
+	
+	UFUNCTION(blueprintCallable)
+	virtual void PauseLevelTimer();
+	
+	UFUNCTION(blueprintCallable)
+	virtual void EndLevelTimer();
+	
 protected:
 	
 	float StartDelayTime;
@@ -53,16 +65,7 @@ protected:
 	
 	virtual void BeginPlay() override;
 	
-	UFUNCTION(blueprintCallable)
-	virtual void StartLevelTimer();
-	
-	UFUNCTION(blueprintCallable)
-	virtual void ResumeLevelTimer();
-	
-	UFUNCTION(blueprintCallable)
-	virtual void PauseLevelTimer();
-	
-	virtual void EndLevelTimer();
+
 	
 	UFUNCTION()
 	virtual void LevelTimerTick();
