@@ -1,0 +1,32 @@
+// Twisted Shadow make by JSP
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/SaveGame.h"
+#include "TS_GlobalSaveGame.generated.h"
+
+USTRUCT(BlueprintType)
+struct FLevelPreviewInfo
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float SlotProgress;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float NextLevelIndex;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FText NextLevelName;
+	
+};
+/**
+ * 
+ */
+UCLASS()
+class TWISTEDSHADOWS_API UTS_GlobalSaveGame : public USaveGame
+{
+	GENERATED_BODY()
+	
+};
