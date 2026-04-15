@@ -16,8 +16,13 @@ class TWISTEDSHADOWS_API UTS_LevelDefinitionDataAsset : public UDataAsset
 	GENERATED_BODY()
 
 public:
+	
+	UPROPERTY(EditDefaultsOnly)
+	int32 StartingLevelIndex = 0;
+
+	UPROPERTY(EditDefaultsOnly)
+	int32 MainMenuLevelIndex = 0;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FLevelDefinition> LevelDefinitions;
-	
-	
 };

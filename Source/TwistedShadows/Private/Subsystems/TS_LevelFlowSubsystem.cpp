@@ -11,11 +11,14 @@
 void UTS_LevelFlowSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
-
+	NewGameLevelIndex = 0;
 	if (const UTS_GameInstance* GI = Cast<UTS_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
 		if (GI->LevelDefinitions)
 		{
+			NewGameLevelIndex = GI->LevelDefinitions->StartingLevelIndex;
+			MainMenuLevelIndex = GI->LevelDefinitions->MainMenuLevelIndex;
+			
 			for (const FLevelDefinition& Level : GI->LevelDefinitions->LevelDefinitions)
 			{
 				FLevelProgress NewProgress;
@@ -25,7 +28,7 @@ void UTS_LevelFlowSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 				NewProgress.LevelName = Level.LevelName;
 				NewProgress.LevelDescription = Level.LevelDescription;
 				NewProgress.LevelAsset = Level.LevelAsset;
-				
+		
 				
 				Levels.Add(Level.LevelID, NewProgress);
 			}
@@ -33,6 +36,13 @@ void UTS_LevelFlowSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	}
 	
 	FWorldDelegates::OnPostWorldInitialization.AddUObject(this,&UTS_LevelFlowSubsystem::OnWorldReady);
+}
+
+void UTS_LevelFlowSubsystem::StartNewGame(const int32 SlotIndex)
+{
+	//For the moment is just the laod of level pro y will need to set up new slot and save before starting a new game
+
+	LoadLevel(NewGameLevelIndex);
 }
 
 void UTS_LevelFlowSubsystem::LoadLevel(const int32 LevelID)
@@ -60,6 +70,8 @@ void UTS_LevelFlowSubsystem::LoadNextLevel()
 
 void UTS_LevelFlowSubsystem::LoadMainMenu()
 {
+	//TODO SAME NEED TRACITION AND SAVE FOR THE MOMENOT ONLY TRAVEl
+	LoadLevel(MainMenuLevelIndex);
 }
 
 void UTS_LevelFlowSubsystem::ReloadLevel()

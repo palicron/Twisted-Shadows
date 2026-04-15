@@ -20,6 +20,9 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	
 	UFUNCTION(BlueprintCallable)
+	void StartNewGame(const int32 SlotIndex);
+	
+	UFUNCTION(BlueprintCallable)
 	void LoadLevel(const int32 LevelID);
 	
 	UFUNCTION(BlueprintCallable)
@@ -40,6 +43,9 @@ protected:
 	
 	int32 CurrentLevelID;
 	int32 LastLevelID;
+	int32 NewGameLevelIndex;
+	int32 MainMenuLevelIndex;
+	int32 CurrentSlotIndex;
 	
 	TMap<int32, FLevelProgress> Levels;
 
