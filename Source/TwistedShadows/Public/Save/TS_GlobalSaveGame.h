@@ -29,4 +29,15 @@ class TWISTEDSHADOWS_API UTS_GlobalSaveGame : public USaveGame
 {
 	GENERATED_BODY()
 	
+	UPROPERTY(VisibleAnywhere)
+	int32 LastUsedSlotIndex;
+	
+	UPROPERTY(VisibleAnywhere)
+	TMap<int32, FLevelPreviewInfo> SlotSummaries;
+	
+	UPROPERTY(VisibleAnywhere)
+	FString CurrentLanguage = "en";
+	
+	UTS_GlobalSaveGame();
+	
 };
