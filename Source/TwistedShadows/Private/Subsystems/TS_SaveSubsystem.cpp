@@ -13,10 +13,18 @@ void UTS_SaveSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 void UTS_SaveSubsystem::SaveGeneralData()
 {
+	if (!UGameplayStatics::DoesSaveGameExist(GlobalDataName, 0))
+	{
+		return;
+	}
+
+	UGameplayStatics::SaveGameToSlot(GlobalSaveGame, GlobalDataName, 0);
 }
 
 void UTS_SaveSubsystem::SaveSlotData(const int32 SlotIndex)
 {
+	FString SlotName = FString::Printf(TEXT("Slot_%d"), SlotIndex);
+	
 }
 
 void UTS_SaveSubsystem::LoadGeneralData()
@@ -33,6 +41,7 @@ void UTS_SaveSubsystem::LoadSlotData(const int32 SlotIndex)
 
 void UTS_SaveSubsystem::SaveAllData(const int32 SlotIndex)
 {
+	
 }
 
 void UTS_SaveSubsystem::DeleteGeneralData()
