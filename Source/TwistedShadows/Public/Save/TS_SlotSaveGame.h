@@ -20,7 +20,7 @@ struct FLevelData
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int32 HighScore;
 	
-	FLevelData() : LevelID(0), BestTime(0.f), HighScore(0)
+	FLevelData() : LevelID(0), BestTime(FLT_MAX), HighScore(0)
 	{
 	};
 };

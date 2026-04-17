@@ -4,6 +4,8 @@
 #include "GameFrameWork/TS_GameMode_Base.h"
 
 #include "GameFrameWork/TS_GameState.h"
+#include "Kismet/GameplayStatics.h"
+#include "Subsystems/TS_SaveSubsystem.h"
 #include "UI/HUD/TS_PlayerHUD.h"
 
 void ATS_GameMode_Base::EndLevel(ACharacter* EndPlayer)
@@ -25,7 +27,12 @@ void ATS_GameMode_Base::EndLevel(ACharacter* EndPlayer)
 	//TODO THIS SHOULD BE IN THE PC ASS A HOLD and getting the new WIDget to get foce
 	PC->SetInputMode(FInputModeUIOnly());
 	PC->SetShowMouseCursor(true);
-	
+
+	if (UTS_SaveSubsystem* Save = UGameplayStatics::GetGameInstance(this)->GetSubsystem<UTS_SaveSubsystem>())
+	{
+		Save->SaveData();
+	}
+
 	ATS_PlayerHUD* PlayerHUD = Cast<ATS_PlayerHUD>(PC->GetHUD());
 	
 	PlayerHUD->DisplayEndLevelWidget();

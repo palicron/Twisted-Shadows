@@ -4,14 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interfaces/TS_Savable.h"
 #include "TS_GoalActor.generated.h"
 
+class UTS_SaveSubsystem;
 class ATS_GameMode_Base;
 class UTS_LevelFlowSubsystem;
 class USphereComponent;
 
 UCLASS()
-class TWISTEDSHADOWS_API ATS_GoalActor : public AActor
+class TWISTEDSHADOWS_API ATS_GoalActor : public AActor, public ITS_Savable
 {
 	GENERATED_BODY()
 	
@@ -24,6 +26,8 @@ protected:
 	TWeakObjectPtr<ATS_GameMode_Base> GameModePtr;
 
 	TWeakObjectPtr<UTS_LevelFlowSubsystem> FlowSubsystem;
+	
+	TWeakObjectPtr<UTS_SaveSubsystem> SaveSubsystemPtr;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Components")
 	uint8 bCanBeActivate : 1;
@@ -38,4 +42,10 @@ protected:
 
 	UFUNCTION()
 	void OnDetectorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	virtual void OnSlotSave_Implementation(UTS_SlotSaveGame* SaveGame) override;
+	
+	virtual void OnLoadSave_Implementation(const UTS_SlotSaveGame* SaveGame) override;
+	
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 };

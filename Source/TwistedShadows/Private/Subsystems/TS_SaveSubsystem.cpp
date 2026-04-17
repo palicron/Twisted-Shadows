@@ -3,6 +3,7 @@
 
 #include "Subsystems/TS_SaveSubsystem.h"
 
+#include "Interfaces/TS_Savable.h"
 #include "Kismet/GameplayStatics.h"
 
 void UTS_SaveSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -39,7 +40,7 @@ void UTS_SaveSubsystem::LoadSlotData(const int32 SlotIndex)
 {
 }
 
-void UTS_SaveSubsystem::SaveAllData(const int32 SlotIndex)
+void UTS_SaveSubsystem::SaveData()
 {
 	
 }
@@ -82,4 +83,24 @@ void UTS_SaveSubsystem::CreateGlobalSaveGame()
 		UGameplayStatics::SaveGameToSlot(NewGlobal, GlobalDataName, 0);
 		OnGlobalSaveDataDelegate.Broadcast(GlobalSaveGame);
 	}
+}
+
+void UTS_SaveSubsystem::RegisterObject(const TScriptInterface<ITS_Savable> Savable)
+{
+	if (!Savable)
+	{
+		return;
+	}
+	
+	SlotRegistry.Add(Savable);
+}
+
+void UTS_SaveSubsystem::UnregisterObject(const TScriptInterface<ITS_Savable> Savable)
+{
+	if (!Savable)
+	{
+		return;
+	}
+	
+	SlotRegistry.Remove(Savable);
 }

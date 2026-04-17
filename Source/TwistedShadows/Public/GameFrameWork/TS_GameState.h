@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameState.h"
+#include "Interfaces/TS_Savable.h"
 #include "TS_GameState.generated.h"
 
 class UMVVM_LevelFlow;
@@ -12,7 +13,7 @@ class UTS_Widget;
  * 
  */
 UCLASS()
-class TWISTEDSHADOWS_API ATS_GameState : public AGameState
+class TWISTEDSHADOWS_API ATS_GameState : public AGameState, public ITS_Savable
 {
 	GENERATED_BODY()
 	
@@ -53,6 +54,9 @@ protected:
 	
 	float TotalPausedTime;
 	
+	UPROPERTY()
+	int32 CurrentLevelId;
+	
 	FTimerHandle InitLevelTimerHandle;
 	
 	FTimerHandle LevelTimerHandle;
@@ -65,7 +69,9 @@ protected:
 	
 	virtual void BeginPlay() override;
 	
-
+	virtual void OnSlotSave_Implementation(UTS_SlotSaveGame* SaveGame) override;
+	
+	virtual void OnLoadSave_Implementation(const UTS_SlotSaveGame* SaveGame) override;
 	
 	UFUNCTION()
 	virtual void LevelTimerTick();

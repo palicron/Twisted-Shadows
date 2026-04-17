@@ -8,6 +8,7 @@
 #include "TS_SaveSubsystem.generated.h"
 
 
+class ITS_Savable;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FGlobalSaveDataSignature, const UTS_GlobalSaveGame*, GlobalSave);
 
 /**
@@ -38,7 +39,7 @@ public:
 	void LoadSlotData(const int32 SlotIndex);
 
 	UFUNCTION(blueprintCallable)
-	void SaveAllData(const int32 SlotIndex);
+	void SaveData();
 	
 	UFUNCTION(BlueprintCallable)
 	void DeleteGeneralData();
@@ -56,6 +57,12 @@ public:
 	
 	UFUNCTION()
 	void CreateGlobalSaveGame();
+
+	UFUNCTION(BlueprintCallable)
+	void RegisterObject(const TScriptInterface<ITS_Savable> Savable);
+	
+	UFUNCTION(BlueprintCallable)
+	void UnregisterObject(const TScriptInterface<ITS_Savable> Savable);
 	
 protected:
 	
@@ -65,6 +72,7 @@ protected:
 	UFUNCTION()
 	void OnGeneralDataLoad(const FString& SlotName, const int32 UserIndex, USaveGame* LoadedSave);
 
-
+	UPROPERTY(BlueprintReadOnly)
+	TArray<TScriptInterface<ITS_Savable>> SlotRegistry;
 	
 };
