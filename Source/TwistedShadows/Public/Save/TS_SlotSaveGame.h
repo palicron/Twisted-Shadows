@@ -38,9 +38,18 @@ class TWISTEDSHADOWS_API UTS_SlotSaveGame : public USaveGame
 	GENERATED_BODY()
 
 public:
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	uint8 bStartedGame : 1;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FDateTime SaveTimestamp;
 
 	UPROPERTY(VisibleAnywhere)
 	TMap<int32, FLevelData> LevelData;
+	
+	UTS_SlotSaveGame()
+	{
+		bStartedGame = false;
+	}
 };
