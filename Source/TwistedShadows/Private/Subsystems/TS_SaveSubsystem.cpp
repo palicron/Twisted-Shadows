@@ -33,7 +33,7 @@ void UTS_SaveSubsystem::LoadGeneralData()
 
 void UTS_SaveSubsystem::LoadData()
 {
-	for (int32 i = 0; i < SlotSaveGames.Num(); i++)
+	for (int32 i = 0; i < MaxSaveSlots; i++)
 	{
 		FString SlotName = FString::Printf(TEXT("Slot_%d"), i);
 		if (UTS_SlotSaveGame* NewSave = Cast<UTS_SlotSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0)))
@@ -44,6 +44,7 @@ void UTS_SaveSubsystem::LoadData()
 		{
 			UTS_SlotSaveGame* SlotSave = NewObject<UTS_SlotSaveGame>();
 			SlotSaveGames.Add(SlotSave);
+			UGameplayStatics::SaveGameToSlot(SlotSave, SlotName, 0);
 		}
 	}
 }
@@ -134,4 +135,24 @@ UTS_SlotSaveGame* UTS_SaveSubsystem::GetSlotSaveGame(const int32 SlotIndex) cons
 	}
 
 	return SlotSaveGames[SlotIndex];
+}
+
+const UTS_SlotSaveGame* UTS_SaveSubsystem::GetCurrentSlotSaveGame() const
+{
+	return GetSlotSaveGame(CurrentSaveIndex);
+}
+
+void UTS_SaveSubsystem::InitNewSlotGame(const int32 SlotIndex)
+{
+	UTS_SlotSaveGame* NewSave = GetSlotSaveGame(SlotIndex);
+
+	if (!NewSave)
+	{
+		return;
+	}
+
+	NewSave->bStartedGame = true;
+
+	FString SlotName = FString::Printf(TEXT("Slot_%d"), SlotIndex);
+	UGameplayStatics::SaveGameToSlot(NewSave, SlotName, 0);
 }

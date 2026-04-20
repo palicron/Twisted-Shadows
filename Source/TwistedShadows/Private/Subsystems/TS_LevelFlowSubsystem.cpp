@@ -7,11 +7,13 @@
 #include "GameFrameWork/TS_GameInstance.h"
 #include "GameFrameWork/TS_WorldSettings.h"
 #include "Kismet/GameplayStatics.h"
+#include "Subsystems/TS_SaveSubsystem.h"
 
 void UTS_LevelFlowSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 	NewGameLevelIndex = 0;
+	CurrentSlotIndex = 0;
 	if (const UTS_GameInstance* GI = Cast<UTS_GameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
 		if (GI->LevelDefinitions)
@@ -33,6 +35,8 @@ void UTS_LevelFlowSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 				Levels.Add(Level.LevelID, NewProgress);
 			}
 		}
+		
+		SaveSubsystemPtr = GI->GetSubsystem<UTS_SaveSubsystem>();
 	}
 	
 	FWorldDelegates::OnPostWorldInitialization.AddUObject(this,&UTS_LevelFlowSubsystem::OnWorldReady);
@@ -40,7 +44,14 @@ void UTS_LevelFlowSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 void UTS_LevelFlowSubsystem::StartNewGame(const int32 SlotIndex)
 {
+	CurrentSlotIndex = SlotIndex;
 	//For the moment is just the laod of level pro y will need to set up new slot and save before starting a new game
+	if (SaveSubsystemPtr.IsValid() && SaveSubsystemPtr->GetGlobalSaveGame())
+	{
+		SaveSubsystemPtr->GetGlobalSaveGame()->LastUsedSlotIndex = SlotIndex;
+		SaveSubsystemPtr->SaveGeneralData();
+		SaveSubsystemPtr->InitNewSlotGame(SlotIndex);
+	}
 
 	LoadLevel(NewGameLevelIndex);
 }
@@ -77,6 +88,22 @@ void UTS_LevelFlowSubsystem::LoadMainMenu()
 void UTS_LevelFlowSubsystem::ReloadLevel()
 {
 	LoadLevel(CurrentLevelID);
+}
+
+void UTS_LevelFlowSubsystem::ContinueGame()
+{
+	if (!SaveSubsystemPtr.IsValid())
+	{
+		return;
+	}
+
+	if (const UTS_GlobalSaveGame* Save = SaveSubsystemPtr->GetGlobalSaveGame())
+	{
+		if (Save->SlotSummaries.Contains(CurrentSlotIndex))
+		{
+			LoadLevel(Save->SlotSummaries[CurrentSlotIndex].NextLevelIndex);
+		}
+	}
 }
 
 FLevelProgress UTS_LevelFlowSubsystem::GetLevelProgressInfo(const int32 LevelID, bool& bFindInfo) const

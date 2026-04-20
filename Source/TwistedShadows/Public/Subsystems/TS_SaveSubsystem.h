@@ -65,6 +65,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UTS_SlotSaveGame* GetSlotSaveGame(const int32 SlotIndex) const;
 	
+	UFUNCTION(BlueprintCallable)
+	const UTS_SlotSaveGame* GetCurrentSlotSaveGame() const;
+	
+	UFUNCTION(BlueprintCallable)
+	void InitNewSlotGame(const int32 SlotIndex);
 protected:
 	
 	//TODO this shoul b ein a data asset

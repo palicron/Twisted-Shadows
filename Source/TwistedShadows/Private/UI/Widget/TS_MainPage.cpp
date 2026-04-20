@@ -41,7 +41,9 @@ void UTS_MainPage::OnStartButtonClicked(const FName ButtonId)
 
 void UTS_MainPage::OnContinueButtonClicked(const FName ButtonId)
 {
-	//TODO No in use until i finish teh save system
+	//TODO For the moment i only will be using the slot 0 Need to implement UI for the others
+	UTS_LevelFlowSubsystem* FlowSubsystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UTS_LevelFlowSubsystem>();
+	FlowSubsystem->ContinueGame();
 }
 
 void UTS_MainPage::OnOptionButtonClicked(const FName ButtonId)

@@ -16,6 +16,8 @@ void ATS_Splash_GameMode::BeginPlay()
 	
 	if (SaveSubsystemPtr.IsValid())
 	{
+		SaveSubsystemPtr->LoadData();
+		
 		if (UTS_GlobalSaveGame* GlobalSave = SaveSubsystemPtr->GetGlobalSaveGame())
 		{
 			AdvanceToMenuLevel();

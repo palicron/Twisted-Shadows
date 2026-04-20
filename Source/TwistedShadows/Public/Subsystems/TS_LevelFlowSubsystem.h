@@ -7,6 +7,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "TS_LevelFlowSubsystem.generated.h"
 
+class UTS_SaveSubsystem;
 /**
  * 
  */
@@ -34,6 +35,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ReloadLevel();
 	
+	UFUNCTION()
+	void ContinueGame();
+	
 	//  need to add get next and previs level info
 	
 	UFUNCTION(BlueprintCallable)
@@ -48,7 +52,8 @@ protected:
 	int32 CurrentSlotIndex;
 	
 	TMap<int32, FLevelProgress> Levels;
-
+	
+	TWeakObjectPtr<UTS_SaveSubsystem> SaveSubsystemPtr;
 	
 	void OnWorldReady(UWorld* World, const UWorld::InitializationValues);
 	

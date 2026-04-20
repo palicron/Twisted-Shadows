@@ -29,6 +29,7 @@ class TWISTEDSHADOWS_API UTS_GlobalSaveGame : public USaveGame
 {
 	GENERATED_BODY()
 	
+public:
 	UPROPERTY(VisibleAnywhere)
 	int32 LastUsedSlotIndex;
 	

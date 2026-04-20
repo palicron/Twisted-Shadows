@@ -60,6 +60,7 @@ void ATS_GoalActor::OnDetectorBeginOverlap(UPrimitiveComponent* OverlappedCompon
 
 void ATS_GoalActor::OnSlotSave_Implementation(UTS_SlotSaveGame* SaveGame)
 {
+	SaveGame->
 	ITS_Savable::OnSlotSave_Implementation(SaveGame);
 }
 
