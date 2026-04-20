@@ -25,13 +25,6 @@ class ATwinStickCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	/** Camera boom spring arm */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* SpringArm;
-
-	/** Player Camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* Camera;
 
 protected:
 

@@ -17,24 +17,7 @@
 ATwinStickCharacter::ATwinStickCharacter()
 {
  	PrimaryActorTick.bCanEverTick = true;
-
-	// create the spring arm
-	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
-	SpringArm->SetupAttachment(RootComponent);
-
-	SpringArm->SetRelativeRotation(FRotator(-50.0f, 0.0f, 0.0f));
-
-	SpringArm->TargetArmLength = 2200.0f;
-	SpringArm->bDoCollisionTest = false;
-	SpringArm->bInheritYaw = false;
-	SpringArm->bEnableCameraLag = true;
-	SpringArm->CameraLagSpeed = 0.5f;
-
-	// create the camera
-	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	Camera->SetupAttachment(SpringArm);
-
-	Camera->SetFieldOfView(75.0f);
+	
 
 	// configure the character movement
 	GetCharacterMovement()->GravityScale = 1.5f;
