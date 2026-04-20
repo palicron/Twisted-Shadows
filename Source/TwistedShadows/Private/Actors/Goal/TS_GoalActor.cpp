@@ -6,7 +6,9 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFrameWork/TS_GameMode_Base.h"
+#include "GameFrameWork/TS_WorldSettings.h"
 #include "Kismet/GameplayStatics.h"
+#include "Save/TS_SlotSaveGame.h"
 #include "Subsystems/TS_LevelFlowSubsystem.h"
 #include "Subsystems/TS_SaveSubsystem.h"
 
@@ -24,6 +26,7 @@ ATS_GoalActor::ATS_GoalActor()
 	PlayerDetectionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);
 	PlayerDetectionSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	bCanBeActivate = true;
+	CurrentLevelID = -1000;
 }
 
 void ATS_GoalActor::BeginPlay()
@@ -36,6 +39,10 @@ void ATS_GoalActor::BeginPlay()
 	if (SaveSubsystemPtr.IsValid())
 	{
 		SaveSubsystemPtr->RegisterObject(this);
+	}
+	if (const ATS_WorldSettings* Settings = Cast<ATS_WorldSettings>(GetWorld()->GetWorldSettings()))
+	{
+		CurrentLevelID = Settings->LevelID;
 	}
 	
 	GameModePtr = Cast<ATS_GameMode_Base>(UGameplayStatics::GetGameMode(GetWorld()));
@@ -60,8 +67,17 @@ void ATS_GoalActor::OnDetectorBeginOverlap(UPrimitiveComponent* OverlappedCompon
 
 void ATS_GoalActor::OnSlotSave_Implementation(UTS_SlotSaveGame* SaveGame)
 {
-	SaveGame->
-	ITS_Savable::OnSlotSave_Implementation(SaveGame);
+	if (!SaveGame)
+	{
+		return;
+	}
+	SaveGame->SaveTimestamp = FDateTime::UtcNow();
+	if (!SaveGame->LevelData.Contains(CurrentLevelID))
+	{
+		FLevelData NewLevelData;
+		NewLevelData.LevelID = CurrentLevelID;
+		SaveGame->LevelData.Add(CurrentLevelID, NewLevelData);
+	}
 }
 
 void ATS_GoalActor::OnLoadSave_Implementation(const UTS_SlotSaveGame* SaveGame)

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Definitions/GeneralDefinitions.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "TSStatics.generated.h"
 
@@ -22,5 +23,8 @@ public:
 	
 	UFUNCTION(BlueprintPure)
 	static FText GetLevelTimeInTextFormat(const float TimeInSec);
+	
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"))
+	static FLevelProgress GetCurrentLevelProgress(const UObject* WorldContextObject);
 	
 };

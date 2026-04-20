@@ -6,6 +6,8 @@
 #include "GameFramework/SaveGame.h"
 #include "TS_GlobalSaveGame.generated.h"
 
+class UTS_SlotSaveGame;
+
 USTRUCT(BlueprintType)
 struct FLevelPreviewInfo
 {
@@ -40,5 +42,6 @@ public:
 	FString CurrentLanguage = "en";
 	
 	UTS_GlobalSaveGame();
+	
 	
 };

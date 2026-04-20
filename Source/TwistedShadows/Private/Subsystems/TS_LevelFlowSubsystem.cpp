@@ -94,10 +94,14 @@ void UTS_LevelFlowSubsystem::ContinueGame()
 {
 	if (!SaveSubsystemPtr.IsValid())
 	{
-		return;
+		SaveSubsystemPtr = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UTS_SaveSubsystem>();
+		if (!SaveSubsystemPtr.IsValid())
+		{
+			return;
+		}
 	}
 
-	if (const UTS_GlobalSaveGame* Save = SaveSubsystemPtr->GetGlobalSaveGame())
+	if (UTS_GlobalSaveGame* Save = SaveSubsystemPtr->GetGlobalSaveGame())
 	{
 		if (Save->SlotSummaries.Contains(CurrentSlotIndex))
 		{

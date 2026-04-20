@@ -3,9 +3,11 @@
 
 #include "Subsystems/TS_SaveSubsystem.h"
 
+#include "Functions/TSStatics.h"
 #include "Interfaces/TS_Savable.h"
 #include "Kismet/GameplayStatics.h"
 #include "Save/TS_SlotSaveGame.h"
+#include "Subsystems/TS_LevelFlowSubsystem.h"
 
 void UTS_SaveSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -58,13 +60,35 @@ void UTS_SaveSubsystem::SaveData()
 		return;
 	}
 
+	//TODO NO CALL THOS
 	for (TScriptInterface<ITS_Savable> Savable : SlotRegistry)
 	{
-		Savable->OnSlotSave(NewSave);
+		ITS_Savable::Execute_OnSlotSave(Savable.GetObject(), NewSave);
 	}
 
 	FString SlotName = FString::Printf(TEXT("Slot_%d"), CurrentSaveIndex);
 	UGameplayStatics::SaveGameToSlot(NewSave, SlotName, 0);
+	
+	UTS_LevelFlowSubsystem* LevelFlow = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UTS_LevelFlowSubsystem>();
+	FLevelProgress Progression =  UTSStatics::GetCurrentLevelProgress(this);
+
+	//TODO NEED TO FIN THE NEXT LEVLE NAME 
+	//TODO NEED TO SE PROGRESSIOn
+	if (GlobalSaveGame->SlotSummaries.Contains(CurrentSaveIndex))
+	{
+		GlobalSaveGame->SlotSummaries[CurrentSaveIndex].NextLevelIndex = Progression.NextLevelID;
+	}
+	else
+	{
+		FLevelPreviewInfo NewPreview;
+		NewPreview.NextLevelIndex = Progression.NextLevelID;
+	
+		//TODO CHECK CORREC INDEX
+		GlobalSaveGame->SlotSummaries.Add(0,NewPreview);
+	}
+	
+	
+	SaveGeneralData();
 }
 
 void UTS_SaveSubsystem::DeleteGeneralData()

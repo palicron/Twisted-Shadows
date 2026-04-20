@@ -43,6 +43,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FLevelProgress GetLevelProgressInfo(const int32 LevelID,bool& bFindInfo) const;
 
+	int32 GetCurrentLevelID() const { return CurrentLevelID; }
 protected:
 	
 	int32 CurrentLevelID;

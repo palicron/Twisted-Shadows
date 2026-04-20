@@ -29,6 +29,8 @@ protected:
 	
 	TWeakObjectPtr<UTS_SaveSubsystem> SaveSubsystemPtr;
 	
+	int32 CurrentLevelID;
+	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Components")
 	uint8 bCanBeActivate : 1;
 	
