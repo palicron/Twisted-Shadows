@@ -19,6 +19,7 @@ ATS_Door::ATS_Door()
 	
 	DoorState = ETS_ActivationState::Deactivated;
 	
+	bCanBeActiveOnce = false;
 	ActivatableComponent = CreateDefaultSubobject<UTS_ActivatableComponent>(TEXT("Activatable Component"));
 }
 
@@ -42,8 +43,11 @@ void ATS_Door::ActivateActor_Implementation(FActivationPayload Payload)
 {
 	//TODO this shoudl be a timelein fo rtth emomento is just set 
 	
-	if(GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("ACtivate"));	
+	if (bCanBeActiveOnce && DoorState == ETS_ActivationState::Activated)
+	{
+		return;
+	}
+	
 	if (DoorState == ETS_ActivationState::Deactivated)
 	{
 		DoorState = ETS_ActivationState::Activated;
@@ -60,7 +64,7 @@ void ATS_Door::ActivateActor_Implementation(FActivationPayload Payload)
 
 void ATS_Door::DeactivateActor_Implementation(FActivationPayload Payload)
 {
-	if (DoorState == ETS_ActivationState::Deactivated)
+	if (DoorState == ETS_ActivationState::Deactivated || bCanBeActiveOnce)
 	{
 		return;
 	}

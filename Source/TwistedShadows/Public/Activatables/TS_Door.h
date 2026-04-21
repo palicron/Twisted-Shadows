@@ -27,6 +27,9 @@ public:
 protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	uint8 bCanBeActiveOnce : 1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UTS_ActivatableComponent> ActivatableComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
