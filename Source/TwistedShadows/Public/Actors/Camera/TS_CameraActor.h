@@ -14,4 +14,17 @@ class TWISTEDSHADOWS_API ATS_CameraActor : public ACameraActor
 {
 	GENERATED_BODY()
 	
+public:
+	
+	UFUNCTION(BlueprintCallable)
+	FVector GetCameraRightVector() const { return GetActorRightVector(); }
+	
+	UFUNCTION(BlueprintCallable)
+	FVector GetCameraForwardVector() const;
+protected:
+	
+
+	
+	virtual void BeginPlay() override;
+	
 };
