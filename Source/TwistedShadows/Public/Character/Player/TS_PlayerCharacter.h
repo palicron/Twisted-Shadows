@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "GameFramework/Character.h"
 #include "TS_PlayerCharacter.generated.h"
 
@@ -24,7 +25,18 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	virtual void PossessedBy(AController* NewController) override;
+	
 protected:
+	
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* MoveAction;
+	
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* InteractAction;
+	
+	TWeakObjectPtr<ATS_PlayerController> PlayerController;
+	
+	TWeakObjectPtr<ATS_CameraActor> CurrentCamera;
 	
 	UPROPERTY(BlueprintReadOnly)
 	FVector CurrentForwardVector;
@@ -32,14 +44,13 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	FVector CurrentRightVector;
 	
-	TWeakObjectPtr<ATS_PlayerController> PlayerController;
-	
-	TWeakObjectPtr<ATS_CameraActor> CurrentCamera;
-	
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* MoveAction;
-	
 	virtual void BeginPlay() override;
+	 
+	UFUNCTION()
+	void Move(const FInputActionValue& Value);
+	
+	UFUNCTION()
+	void OnCameraChangeCallback(ATS_CameraActor* NewCamera);
 	
 	
 	

@@ -11,6 +11,6 @@ void ATS_CameraActor::BeginPlay()
 
 FVector ATS_CameraActor::GetCameraForwardVector() const
 {
-	return FVector::CrossProduct(GetActorForwardVector(), FVector::UpVector).GetSafeNormal();
+	return FVector(GetActorForwardVector().X,GetActorForwardVector().Y,0.f).GetSafeNormal();
 }
 

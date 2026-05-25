@@ -8,6 +8,8 @@
 
 class ATS_CameraActor;
 class UInputMappingContext;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCameraChangedSignature, ATS_CameraActor*, CameraActor);
 /**
  * 
  */
@@ -20,8 +22,14 @@ class TWISTEDSHADOWS_API ATS_PlayerController : public APlayerController
 public:
 	ATS_PlayerController();
 	
+	UPROPERTY(BlueprintAssignable)
+	FOnCameraChangedSignature OnCameraChangedDelegate;
+	
 	UFUNCTION(BlueprintCallable)
 	ATS_CameraActor* GetCurrentCamera() const { return CurrentCameraActor.Get();}
+	
+	UFUNCTION(blueprintcallable)
+	void SetNewCamera(ATS_CameraActor* NewCamera);
 protected:
 	
 	TWeakObjectPtr<ATS_CameraActor> CurrentCameraActor;
@@ -32,6 +40,8 @@ protected:
 	virtual void BeginPlay() override;
 	
 	virtual void SetupInputComponent() override;
+	
+
 
 	
 };
