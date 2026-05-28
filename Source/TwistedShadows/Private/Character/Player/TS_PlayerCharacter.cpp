@@ -5,12 +5,15 @@
 
 #include "EnhancedInputComponent.h"
 #include "Actors/Camera/TS_CameraActor.h"
+#include "Component/Interact/TS_InteractComponent.h"
 #include "Controllers/TS_PlayerController.h"
 
 
 ATS_PlayerCharacter::ATS_PlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	
+	PlayerInteractComponent = CreateDefaultSubobject<UTS_InteractComponent>("Player Interact Component");
 
 }
 

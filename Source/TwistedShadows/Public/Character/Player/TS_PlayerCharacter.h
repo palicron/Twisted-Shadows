@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "TS_PlayerCharacter.generated.h"
 
+class UTS_InteractComponent;
 class ATS_CameraActor;
 class ATS_PlayerController;
 class UInputAction;
@@ -27,6 +28,9 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 	
 protected:
+	
+	UPROPERTY(EditDefaultsOnly, Category="Components")
+	TObjectPtr<UTS_InteractComponent> PlayerInteractComponent;
 	
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MoveAction;
