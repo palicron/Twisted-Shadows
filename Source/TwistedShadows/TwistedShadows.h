@@ -6,3 +6,5 @@
 
 /** Main log category used across the project */
 DECLARE_LOG_CATEGORY_EXTERN(LogTwistedShadows, Log, All);
+
+#define INTERACTABLE_TRACE_CHANNEL ECC_GameTraceChannel1

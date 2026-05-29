@@ -3,32 +3,58 @@
 
 #include "Component/Interact/TS_InteractComponent.h"
 
-// Sets default values for this component's properties
+
 UTS_InteractComponent::UTS_InteractComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
-	// ...
+	bIsActivate = true;
+	InteractCheckTick = 0.15f;
+	InteractMinDotAngle = 0.5f;
+	InteractCoolDown = 0.3f;
+	LastActivationTime = 0.f;
 }
 
 
-// Called when the game starts
 void UTS_InteractComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
-
-// Called every frame
 void UTS_InteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
+
+void UTS_InteractComponent::ActivateInteraction()
+{
+	bIsActivate = true;
+	LastActivationTime = 0.f;
+}
+
+void UTS_InteractComponent::DeactivateInteraction()
+{
+	bIsActivate = false;
+}
+
+void UTS_InteractComponent::CheckInteract()
+{
+}
+
+void UTS_InteractComponent::ActivateInteract()
+{
+	if (!bIsActivate || !InteractableActor.IsValid())
+	{
+		return;
+	}
+}
+
+void UTS_InteractComponent::OnInteractableOverlap()
+{
+}
+
+void UTS_InteractComponent::OnInteractableEndOverlap()
+{
+}
+
 

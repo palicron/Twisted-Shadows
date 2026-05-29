@@ -13,16 +13,52 @@ class TWISTEDSHADOWS_API UTS_InteractComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
+	
 	UTS_InteractComponent();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	UFUNCTION(BlueprintCallable)
+	bool IsInteract() const { return bIsActivate; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetIsInteract(const bool InbIsActivate) { bIsActivate = InbIsActivate; };
+protected:
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
+	TEnumAsByte<ECollisionChannel> InteractTraceChanel;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
+	float InteractCoolDown;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
+	float InteractRadius;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
+	float InteractCheckTick;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
+	float InteractMinDotAngle;
+	
+	float LastActivationTime;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
+	uint8 bIsActivate : 1;
+	
+	
+	TWeakObjectPtr<AActor> InteractableActor;
+	
+	virtual void BeginPlay() override;
+
+	void ActivateInteraction();
+
+	void DeactivateInteraction();
+	
+	void CheckInteract();
+	
+	void ActivateInteract();
+	
+	void OnInteractableOverlap();
+	
+	void OnInteractableEndOverlap();
 };
