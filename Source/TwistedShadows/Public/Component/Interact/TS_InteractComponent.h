@@ -25,6 +25,8 @@ public:
 	void SetIsInteract(const bool InbIsActivate) { bIsActivate = InbIsActivate; };
 protected:
 	
+	TWeakObjectPtr<AActor> Owner;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
 	TEnumAsByte<ECollisionChannel> InteractTraceChanel;
 	
@@ -45,7 +47,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
 	uint8 bIsActivate : 1;
 	
-	
 	TWeakObjectPtr<AActor> InteractableActor;
 	
 	virtual void BeginPlay() override;
@@ -61,4 +62,15 @@ protected:
 	void OnInteractableOverlap();
 	
 	void OnInteractableEndOverlap();
+	
+	void StarInteractableTrace();
+	
+	UFUNCTION()
+	void TickTrace();
+	
+	
+	FTimerHandle InteractCheckTimerHandle;
+	
+	
+	
 };
