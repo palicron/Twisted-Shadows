@@ -7,6 +7,8 @@
 #include "TS_InteractComponent.generated.h"
 
 
+class ITS_Interactable;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TWISTEDSHADOWS_API UTS_InteractComponent : public UActorComponent
 {
@@ -27,8 +29,7 @@ protected:
 	
 	TWeakObjectPtr<AActor> Owner;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
-	TEnumAsByte<ECollisionChannel> InteractTraceChanel;
+	FCollisionQueryParams TraceParams;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
 	float InteractCoolDown;
@@ -45,9 +46,12 @@ protected:
 	float LastActivationTime;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
+	TEnumAsByte<ECollisionChannel> InteractTraceChanel;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Interact")
 	uint8 bIsActivate : 1;
 	
-	TWeakObjectPtr<AActor> InteractableActor;
+	TWeakObjectPtr<AActor> InteractableActorPtr;
 	
 	virtual void BeginPlay() override;
 
@@ -55,9 +59,7 @@ protected:
 
 	void DeactivateInteraction();
 	
-	void CheckInteract();
-	
-	void ActivateInteract();
+	void ActivateInteract() const;
 	
 	void OnInteractableOverlap();
 	
@@ -65,9 +67,12 @@ protected:
 	
 	void StarInteractableTrace();
 	
+	void StopInteractableTrace();
+	
 	UFUNCTION()
 	void TickTrace();
 	
+	void TryToSetInteractable(const TArray<FHitResult> DetectActors);
 	
 	FTimerHandle InteractCheckTimerHandle;
 	

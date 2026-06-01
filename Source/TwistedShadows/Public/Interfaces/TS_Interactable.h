@@ -19,7 +19,15 @@ class UTS_Interactable : public UInterface
 class TWISTEDSHADOWS_API ITS_Interactable
 {
 	GENERATED_BODY()
-
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void OnInteractSelect();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void OnInteractDeselect();
+	
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ActivateInteractable();
 };
