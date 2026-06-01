@@ -120,6 +120,12 @@ void UTS_InteractComponent::TickTrace()
 	{
 		TryToSetInteractable(InteractableHits);
 	}
+	else if (InteractableActorPtr.IsValid())
+	{
+		ITS_Interactable::Execute_OnInteractDeselect(InteractableActorPtr.Get());
+		OnInteractableEndOverlap();
+		InteractableActorPtr = nullptr;
+	}
 
 	//@TODO: in later proposition check if ther wall
 }

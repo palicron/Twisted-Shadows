@@ -36,7 +36,9 @@ void ATS_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
+		
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATS_PlayerCharacter::Move);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ATS_PlayerCharacter::Interact);
 	}
 
 }
@@ -70,6 +72,11 @@ void ATS_PlayerCharacter::Move(const FInputActionValue& Value)
 	
 	AddMovementInput(CurrentForwardVector, InputVector.X);
 	AddMovementInput(CurrentRightVector, InputVector.Y);
+}
+
+void ATS_PlayerCharacter::Interact(const FInputActionValue& Value)
+{
+	PlayerInteractComponent->ActivateInteract();
 }
 
 void ATS_PlayerCharacter::OnCameraChangeCallback(ATS_CameraActor* NewCamera)

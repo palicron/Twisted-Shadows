@@ -25,6 +25,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetIsInteract(const bool InbIsActivate) { bIsActivate = InbIsActivate; };
+	
+	UFUNCTION(BlueprintCallable)
+	void ActivateInteract() const;
 protected:
 	
 	TWeakObjectPtr<AActor> Owner;
@@ -54,12 +57,12 @@ protected:
 	TWeakObjectPtr<AActor> InteractableActorPtr;
 	
 	virtual void BeginPlay() override;
-
+	
 	void ActivateInteraction();
-
+	
 	void DeactivateInteraction();
 	
-	void ActivateInteract() const;
+
 	
 	void OnInteractableOverlap();
 	
