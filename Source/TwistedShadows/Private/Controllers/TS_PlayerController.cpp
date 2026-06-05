@@ -20,6 +20,9 @@ ATS_PlayerController::ATS_PlayerController()
 {
 	bIsInShadowCasting = false;
 	CurrentShadowCastingState = ETS_ShadowCastingState::None;
+	
+	ShadowMaxCastingDistance = 450.f;
+	ShadowMinCastingDistance = 125.f;
 }
 
 
@@ -143,7 +146,6 @@ void ATS_PlayerController::SetNewCamera(ATS_CameraActor* NewCamera)
 
 void ATS_PlayerController::MouseTrackShadowCast()
 {
-	
 	FVector HitLocation = FVector::ZeroVector;
 	bool bHit = GetLocationUnderCursor(HitLocation);
 	
@@ -151,6 +153,15 @@ void ATS_PlayerController::MouseTrackShadowCast()
 	if (!bHit)
 	{
 		CurrentShadowCastingState = ETS_ShadowCastingState::InvalidFloor;
+		return;
+	}
+	
+	float DistanceToCaster = (GetPawn()->GetActorLocation() - HitLocation).Size();
+	
+	if (FMath::Abs(DistanceToCaster) > ShadowMaxCastingDistance || FMath::Abs(DistanceToCaster) < ShadowMinCastingDistance)
+	{
+		CurrentShadowCastingState = ETS_ShadowCastingState::Block;
+		DecalActor->SetActorHiddenInGame(true);
 		return;
 	}
 
@@ -174,7 +185,6 @@ void ATS_PlayerController::MouseTrackShadowCast()
 			DecalActor->SetActorLocation(HitLocation);
 		}
 		CurrentShadowCastingState = ETS_ShadowCastingState::Casting;
-		//DrawDebugSphere(GetWorld(), HitLocation, 100.f, 12.f,FColor::Green, false, 0.1f,1);
 		return;
 	}
 	
@@ -184,8 +194,7 @@ void ATS_PlayerController::MouseTrackShadowCast()
 		DecalActor->SetActorHiddenInGame(true);
 		
 	}
-	//DrawDebugSphere(GetWorld(), HitLocation, 100.f, 12.f,FColor::Red, false, 0.1f,1);
-
+	
 }
 
 bool ATS_PlayerController::GetLocationUnderCursor(FVector& Location)
@@ -222,11 +231,20 @@ void ATS_PlayerController::SpawnAndPossesShadow()
 	ShadowCharacter = GetWorld()->SpawnActorDeferred<ATS_ShadowCharacter>(ShadowCharacterClass,NewTransform,this,GetPawn());
 	ShadowCharacter->FinishSpawning(NewTransform);
 	LastCaster = Cast<ATS_CasterCharacter>(GetPawn());
-
+	ShadowCharacter->OnShadowDestroyDelegate.AddDynamic(this,&ATS_PlayerController::PossessLastCaster);
 	Possess(ShadowCharacter.Get());
-	
+	ShadowCharacter->SetUpShadowInfo(LastCaster.Get(), HitLocation);
 	if (CurrentCameraActor.IsValid())
 	{
+		SetViewTargetWithBlend(CurrentCameraActor.Get(), 0.f);
+	}
+}
+
+void ATS_PlayerController::PossessLastCaster()
+{
+	if (CurrentCameraActor.IsValid())
+	{
+		Possess(LastCaster.Get());
 		SetViewTargetWithBlend(CurrentCameraActor.Get(), 0.f);
 	}
 }
@@ -235,14 +253,9 @@ void ATS_PlayerController::DestroyShadow()
 {
 	if (ShadowCharacter.IsValid() && LastCaster.IsValid())
 	{
-		Possess(LastCaster.Get());
-		// Posible that this will be handle by the shadow 
-		ShadowCharacter->Destroy();
+		PossessLastCaster();
+		ShadowCharacter->DestroyShadow();
 		ShadowCharacter = nullptr;
-		if (CurrentCameraActor.IsValid())
-		{
-			SetViewTargetWithBlend(CurrentCameraActor.Get(), 0.f);
-		}
 	}
 }
 

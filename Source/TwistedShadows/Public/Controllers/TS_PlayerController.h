@@ -75,6 +75,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Selection")
 	TEnumAsByte<ETraceTypeQuery> SelectionTraceChannel;
 	
+	UPROPERTY(EditDefaultsOnly)
+	float ShadowMaxCastingDistance;
+	
+	UPROPERTY(EditDefaultsOnly)
+	float ShadowMinCastingDistance;
+	
 	uint8 bIsInShadowCasting : 1;
 	
 	virtual void BeginPlay() override;
@@ -96,6 +102,9 @@ protected:
 	
 	UFUNCTION()
 	void SpawnAndPossesShadow();
+	
+	UFUNCTION()
+	void PossessLastCaster();
 	
 	UFUNCTION(blueprintcallable)
 	void DestroyShadow();
