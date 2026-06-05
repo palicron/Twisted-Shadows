@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
+#include "Definitions/GeneralDefinitions.h"
 #include "TS_PlayerController.generated.h"
 
+class ATS_PlayerCharacter;
+class ATS_ShadowCharacter;
 class ADecalActor;
 class UInputAction;
 class ATS_CameraActor;
@@ -37,6 +40,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool GetIsInShadowCasting() const { return bIsInShadowCasting; }
 protected:
+	
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ATS_ShadowCharacter> ShadowCharacterClass;
+	
+	TWeakObjectPtr<ATS_PlayerCharacter> LastCaster;
+	
+	TWeakObjectPtr<ATS_ShadowCharacter> ShadowCharacter;
+	
+	ETS_ShadowCastingState CurrentShadowCastingState;
 	
 	UPROPERTY(EditAnywhere, Category = "Decal")
 	TSubclassOf<ADecalActor>  DecalActorClass;
@@ -69,6 +81,8 @@ protected:
 	
 	virtual void SetupInputComponent() override;
 	
+	void ToggleShadowCasting();
+
 	UFUNCTION()
 	virtual void OnShadowCastInput(const FInputActionValue& Value);
 	
@@ -80,5 +94,9 @@ protected:
 	
 	bool GetLocationUnderCursor(FVector& Location);
 	
-
+	UFUNCTION()
+	void SpawnAndPossesShadow();
+	
+	UFUNCTION(blueprintcallable)
+	void DestroyShadow();
 };

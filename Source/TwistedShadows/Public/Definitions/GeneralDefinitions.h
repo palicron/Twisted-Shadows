@@ -15,6 +15,15 @@ enum class ETS_ActivationState : uint8
 	Disabled
 };
 
+UENUM(BlueprintType)
+enum class ETS_ShadowCastingState : uint8
+{
+	None,
+	Casting,
+	InvalidFloor,
+	Block
+};
+
 USTRUCT(BlueprintType)
 struct FActivationPayload
 {
@@ -97,6 +106,8 @@ struct FLevelProgress
 	{
 	};
 };
+
+
 
 
 

@@ -8,6 +8,9 @@
 #include "TwistedShadows.h"
 #include "Actors/Camera/TS_CameraActor.h"
 #include "Camera/CameraActor.h"
+#include "Character/Player/TS_CasterCharacter.h"
+#include "Character/Player/TS_ShadowCharacter.h"
+
 #include "Engine/DecalActor.h"
 #include "Interfaces/TS_Interactable.h"
 #include "Kismet/GameplayStatics.h"
@@ -16,6 +19,7 @@
 ATS_PlayerController::ATS_PlayerController()
 {
 	bIsInShadowCasting = false;
+	CurrentShadowCastingState = ETS_ShadowCastingState::None;
 }
 
 
@@ -45,8 +49,6 @@ void ATS_PlayerController::BeginPlay()
 	if (CurrentCameraActor.IsValid())
 	{
 		SetViewTargetWithBlend(CurrentCameraActor.Get(), 0.f);
-		if(GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Some debug message!"));	
 	}
 }
 
@@ -68,16 +70,18 @@ void ATS_PlayerController::SetupInputComponent()
 	Input->BindAction(ShadowClickInput,ETriggerEvent::Started,this,&ATS_PlayerController::OnShadowClickInput);
 }
 
-void ATS_PlayerController::OnShadowCastInput(const FInputActionValue& Value)
+void ATS_PlayerController::ToggleShadowCasting()
 {
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 
-	if (!Subsystem)
+	if (!Subsystem )
 	{
 		return;
 	}
+	
 	if (bIsInShadowCasting)
 	{
+		CurrentShadowCastingState = ETS_ShadowCastingState::None;
 		bShowMouseCursor = false;
 		SetInputMode(FInputModeGameOnly());
 		bIsInShadowCasting = false;
@@ -87,6 +91,7 @@ void ATS_PlayerController::OnShadowCastInput(const FInputActionValue& Value)
 		return;
 	}
 	
+	CurrentShadowCastingState = ETS_ShadowCastingState::Casting;
 	bShowMouseCursor = true;
 	FInputModeGameAndUI InputMode;
 	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
@@ -99,14 +104,30 @@ void ATS_PlayerController::OnShadowCastInput(const FInputActionValue& Value)
 	bIsInShadowCasting = true;
 }
 
+void ATS_PlayerController::OnShadowCastInput(const FInputActionValue& Value)
+{
+	APawn* PossesPawn = GetPawn();
+	if (PossesPawn && PossesPawn->IsA<ATS_CasterCharacter>())
+	{
+		ToggleShadowCasting();
+	}
+	else
+	{
+		DestroyShadow();
+	}
+}
+
 void ATS_PlayerController::OnShadowClickInput(const FInputActionValue& Value)
 {
-	float MouseX;
-	float MouseY;
-	
-	GetMousePosition(MouseX, MouseY);
-	if(GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Click :::: X%f ||| Y %f "), MouseX,MouseY));
+	if (CurrentShadowCastingState != ETS_ShadowCastingState::Casting)
+	{
+		return;
+	}
+
+	CurrentShadowCastingState = ETS_ShadowCastingState::None;
+	DecalActor->SetActorHiddenInGame(true);
+	SpawnAndPossesShadow();
+	ToggleShadowCasting();
 }
 
 
@@ -129,6 +150,7 @@ void ATS_PlayerController::MouseTrackShadowCast()
 
 	if (!bHit)
 	{
+		CurrentShadowCastingState = ETS_ShadowCastingState::InvalidFloor;
 		return;
 	}
 
@@ -151,12 +173,14 @@ void ATS_PlayerController::MouseTrackShadowCast()
 			DecalActor->SetActorHiddenInGame(false);
 			DecalActor->SetActorLocation(HitLocation);
 		}
+		CurrentShadowCastingState = ETS_ShadowCastingState::Casting;
 		//DrawDebugSphere(GetWorld(), HitLocation, 100.f, 12.f,FColor::Green, false, 0.1f,1);
 		return;
 	}
 	
 	if (DecalActor)
 	{
+		CurrentShadowCastingState = ETS_ShadowCastingState::Block;
 		DecalActor->SetActorHiddenInGame(true);
 		
 	}
@@ -179,5 +203,46 @@ bool ATS_PlayerController::GetLocationUnderCursor(FVector& Location)
 	}
 
 	return OutHit.bBlockingHit;
+}
+
+void ATS_PlayerController::SpawnAndPossesShadow()
+{
+	FVector HitLocation = FVector::ZeroVector;
+	bool bHit = GetLocationUnderCursor(HitLocation);
+	
+
+	if (!bHit || !ShadowCharacterClass)
+	{
+		return;
+	}
+	HitLocation.Z += 100.f;
+	FTransform NewTransform;
+	NewTransform.SetLocation(HitLocation);
+	
+	ShadowCharacter = GetWorld()->SpawnActorDeferred<ATS_ShadowCharacter>(ShadowCharacterClass,NewTransform,this,GetPawn());
+	ShadowCharacter->FinishSpawning(NewTransform);
+	LastCaster = Cast<ATS_CasterCharacter>(GetPawn());
+
+	Possess(ShadowCharacter.Get());
+	
+	if (CurrentCameraActor.IsValid())
+	{
+		SetViewTargetWithBlend(CurrentCameraActor.Get(), 0.f);
+	}
+}
+
+void ATS_PlayerController::DestroyShadow()
+{
+	if (ShadowCharacter.IsValid() && LastCaster.IsValid())
+	{
+		Possess(LastCaster.Get());
+		// Posible that this will be handle by the shadow 
+		ShadowCharacter->Destroy();
+		ShadowCharacter = nullptr;
+		if (CurrentCameraActor.IsValid())
+		{
+			SetViewTargetWithBlend(CurrentCameraActor.Get(), 0.f);
+		}
+	}
 }
 

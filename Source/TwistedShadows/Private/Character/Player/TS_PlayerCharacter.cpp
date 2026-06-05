@@ -53,7 +53,7 @@ void ATS_PlayerCharacter::PossessedBy(AController* NewController)
 	{
 		return;
 	}
-	PlayerController->OnCameraChangedDelegate.AddDynamic(this,&ATS_PlayerCharacter::OnCameraChangeCallback);
+	PlayerController->OnCameraChangedDelegate.AddUniqueDynamic(this,&ATS_PlayerCharacter::OnCameraChangeCallback);
 	CurrentCamera = PlayerController->GetCurrentCamera();
 
 	if (!CurrentCamera.IsValid())

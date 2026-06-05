@@ -54,7 +54,8 @@ protected:
 	void Move(const FInputActionValue& Value);
 	
 	UFUNCTION()
-	void Interact(const FInputActionValue& Value);
+	virtual void Interact(const FInputActionValue& Value);
+	
 	UFUNCTION()
 	void OnCameraChangeCallback(ATS_CameraActor* NewCamera);
 	
