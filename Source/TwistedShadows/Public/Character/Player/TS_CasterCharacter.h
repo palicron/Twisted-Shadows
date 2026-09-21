@@ -16,4 +16,11 @@ class TWISTEDSHADOWS_API ATS_CasterCharacter : public ATS_PlayerCharacter
 	GENERATED_BODY()
 	
 	
+public:
+
+	ATS_CasterCharacter();
+	
+	UFUNCTION(blueprintCallable, Category = "Caster | Shadow")
+	void SetCasterShadow(const bool bActiveShadow);
+	
 };

@@ -10,6 +10,7 @@
 #include "Camera/CameraActor.h"
 #include "Character/Player/TS_CasterCharacter.h"
 #include "Character/Player/TS_ShadowCharacter.h"
+#include "Materials/MaterialParameterCollectionInstance.h"
 
 #include "Engine/DecalActor.h"
 #include "Interfaces/TS_Interactable.h"
@@ -81,6 +82,9 @@ void ATS_PlayerController::ToggleShadowCasting()
 	{
 		return;
 	}
+	//Temp
+	UMaterialParameterCollectionInstance* MPCInstance = GetWorld()->GetParameterCollectionInstance(ShadowMPCTemp);
+	MPCInstance->SetScalarParameterValue(TEXT("Intensity"), bIsInShadowCasting ? 0.f : 1.f);
 	
 	if (bIsInShadowCasting)
 	{
@@ -93,7 +97,7 @@ void ATS_PlayerController::ToggleShadowCasting()
 		GetWorld()->GetTimerManager().ClearTimer(ShadowCastMouseTrackHandle);
 		return;
 	}
-	
+
 	CurrentShadowCastingState = ETS_ShadowCastingState::Casting;
 	bShowMouseCursor = true;
 	FInputModeGameAndUI InputMode;
@@ -231,9 +235,16 @@ void ATS_PlayerController::SpawnAndPossesShadow()
 	ShadowCharacter = GetWorld()->SpawnActorDeferred<ATS_ShadowCharacter>(ShadowCharacterClass,NewTransform,this,GetPawn());
 	ShadowCharacter->FinishSpawning(NewTransform);
 	LastCaster = Cast<ATS_CasterCharacter>(GetPawn());
+
+	if (LastCaster.IsValid())
+	{
+		LastCaster->SetCasterShadow(false);
+	}
 	ShadowCharacter->OnShadowDestroyDelegate.AddDynamic(this,&ATS_PlayerController::PossessLastCaster);
 	Possess(ShadowCharacter.Get());
 	ShadowCharacter->SetUpShadowInfo(LastCaster.Get(), HitLocation);
+	
+
 	if (CurrentCameraActor.IsValid())
 	{
 		SetViewTargetWithBlend(CurrentCameraActor.Get(), 0.f);
@@ -245,6 +256,7 @@ void ATS_PlayerController::PossessLastCaster()
 	if (CurrentCameraActor.IsValid())
 	{
 		Possess(LastCaster.Get());
+		LastCaster->SetCasterShadow(true);
 		SetViewTargetWithBlend(CurrentCameraActor.Get(), 0.f);
 	}
 }

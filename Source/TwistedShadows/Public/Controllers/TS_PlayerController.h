@@ -8,12 +8,14 @@
 #include "Definitions/GeneralDefinitions.h"
 #include "TS_PlayerController.generated.h"
 
+class ATS_CasterCharacter;
 class ATS_PlayerCharacter;
 class ATS_ShadowCharacter;
 class ADecalActor;
 class UInputAction;
 class ATS_CameraActor;
 class UInputMappingContext;
+class UMaterialParameterCollection;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCameraChangedSignature, ATS_CameraActor*, CameraActor);
 /**
@@ -44,9 +46,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ATS_ShadowCharacter> ShadowCharacterClass;
 	
-	TWeakObjectPtr<ATS_PlayerCharacter> LastCaster;
+	TWeakObjectPtr<ATS_CasterCharacter> LastCaster;
 	
 	TWeakObjectPtr<ATS_ShadowCharacter> ShadowCharacter;
+	
+	//TODO: Temporal to call the MPC this shoudl b ein a subusytem
+	
+	UPROPERTY(EditDefaultsOnly)
+	UMaterialParameterCollection* ShadowMPCTemp; 
 	
 	ETS_ShadowCastingState CurrentShadowCastingState;
 	

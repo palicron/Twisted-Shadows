@@ -26,7 +26,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	virtual void PossessedBy(AController* NewController) override;
-	
+
+
 protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category="Components")
