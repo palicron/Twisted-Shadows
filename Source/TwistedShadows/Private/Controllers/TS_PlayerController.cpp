@@ -21,7 +21,7 @@ ATS_PlayerController::ATS_PlayerController()
 {
 	bIsInShadowCasting = false;
 	CurrentShadowCastingState = ETS_ShadowCastingState::None;
-	
+	bAutoManageActiveCameraTarget = false;
 	ShadowMaxCastingDistance = 450.f;
 	ShadowMinCastingDistance = 125.f;
 }

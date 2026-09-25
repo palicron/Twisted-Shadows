@@ -3,10 +3,20 @@
 
 #include "GameFrameWork/TS_GameMode_Base.h"
 
+#include "EngineUtils.h"
 #include "GameFrameWork/TS_GameState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Subsystems/TS_SaveSubsystem.h"
 #include "UI/HUD/TS_PlayerHUD.h"
+#include "Runtime/LevelSequence/Public/LevelSequenceActor.h"
+#include "Runtime/LevelSequence/Public/LevelSequencePlayer.h"
+
+class ALevelSequenceActor;
+
+ATS_GameMode_Base::ATS_GameMode_Base()
+{
+	bDelayedStart = true;
+}
 
 void ATS_GameMode_Base::EndLevel(ACharacter* EndPlayer)
 {
@@ -41,4 +51,42 @@ void ATS_GameMode_Base::EndLevel(ACharacter* EndPlayer)
 	//Disable player Controller for game
 	// Display New HUD of ending level
 	
+}
+
+void ATS_GameMode_Base::HandleMatchIsWaitingToStart()
+{
+	Super::HandleMatchIsWaitingToStart();
+	
+	//TODO add check if shoudl pály a sequence
+	ALevelSequenceActor* IntroSequenceActor = nullptr;
+	for (TActorIterator<ALevelSequenceActor> It(GetWorld()); It; ++It)
+	{
+		if (It->ActorHasTag(TEXT("LevelIntro")))
+		{
+			IntroSequenceActor = *It;
+			break;
+		}
+	}
+	
+	if (!IntroSequenceActor)
+	{
+		StartMatch();
+	}
+	
+	if (ULevelSequencePlayer* Sequencer = IntroSequenceActor->GetSequencePlayer())
+	{
+		Sequencer->OnFinished.AddDynamic(this, &ATS_GameMode_Base::OnIntroSequenceFinished);
+		
+		Sequencer->Play();
+	}
+	else
+	{
+		StartMatch(); // defensive: actor exists but player wasn't set up correctly
+	}
+	//StartMatch();
+}
+
+void ATS_GameMode_Base::OnIntroSequenceFinished()
+{
+	StartMatch();
 }

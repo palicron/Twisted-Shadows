@@ -15,8 +15,15 @@ class TWISTEDSHADOWS_API ATS_GameMode_Base : public AGameMode
 	GENERATED_BODY()
 	
 public:
+	ATS_GameMode_Base();
 	
 	UFUNCTION(BlueprintCallable)
 	void EndLevel(ACharacter* EndPlayer);
 	
+protected:
+
+	virtual void HandleMatchIsWaitingToStart() override;
+	
+	UFUNCTION()
+	void OnIntroSequenceFinished();
 };
