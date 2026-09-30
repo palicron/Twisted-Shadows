@@ -52,7 +52,9 @@ void ATS_PressurePlate::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 	bIsActivate = true;
 	
 	OverlappingActors.AddUnique(OtherActor);
-	ActivatorComponent->ActivateActors();
+	
+	
+	ActivatorComponent->ActivateActors(OverlapTags);
 	
 	BP_ActivatePlate();
 }
@@ -68,7 +70,7 @@ void ATS_PressurePlate::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor
 	if (OverlappingActors.Num() == 0)
 	{
 		bIsActivate = false;
-		ActivatorComponent->DeActivateActors();
+		ActivatorComponent->ActivateActors(EndOverlapTags);
 		BP_DeactivatePlate();
 	}
 }

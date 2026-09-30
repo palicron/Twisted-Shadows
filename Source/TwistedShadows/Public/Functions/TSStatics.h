@@ -27,4 +27,8 @@ public:
 	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"))
 	static FLevelProgress GetCurrentLevelProgress(const UObject* WorldContextObject);
 	
+	
+	UFUNCTION(BlueprintPure)
+	static bool CanBeActivate(const FActivationSettings& ActivatorSetting, const FGameplayTagContainer& RequiredTags);
+	
 };

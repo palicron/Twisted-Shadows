@@ -3,6 +3,9 @@
 
 #include "Public/Activatables/TS_Door.h"
 
+#include "Algo/ForEach.h"
+#include "Functions/TSStatics.h"
+
 
 ATS_Door::ATS_Door()
 {
@@ -34,6 +37,7 @@ void ATS_Door::BeginPlay()
 	}
 }
 
+
 void ATS_Door::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -48,29 +52,23 @@ void ATS_Door::ActivateActor_Implementation(FActivationPayload Payload)
 		return;
 	}
 	
-	if (DoorState == ETS_ActivationState::Deactivated)
+	if (UTSStatics::CanBeActivate(OpenTag,Payload.ActivationTags))
 	{
-		DoorState = ETS_ActivationState::Activated;
-		MeshComponent->SetRelativeLocation(OpenPositionTarget->GetRelativeLocation());
-	}
-	else if (DoorState == ETS_ActivationState::Activated)
-	{
-		DoorState = ETS_ActivationState::Deactivated;
-		MeshComponent->SetRelativeLocation(ClosePositionTarget->GetRelativeLocation());
-	}
-
-	OnDoorStateChangedDelegate.Broadcast(DoorState);
-}
-
-void ATS_Door::DeactivateActor_Implementation(FActivationPayload Payload)
-{
-	if (DoorState == ETS_ActivationState::Deactivated || bCanBeActiveOnce)
-	{
+		OpenDoor();
 		return;
 	}
 	
-	DoorState = ETS_ActivationState::Deactivated;
-	MeshComponent->SetRelativeLocation(ClosePositionTarget->GetRelativeLocation());
+	if (UTSStatics::CanBeActivate(CloseTag, Payload.ActivationTags))
+	{
+		CloseDoor();
+		return;
+	}
+	
+	if (UTSStatics::CanBeActivate(FlipFlopTag, Payload.ActivationTags))
+	{
+		FlipFLopDoor();
+	}
+	
 }
 
 ETS_ActivationState ATS_Door::GetActivationState_Implementation() const
@@ -88,3 +86,39 @@ UTS_ActivatableComponent* ATS_Door::GetActivatableComponent_Implementation() con
 	return ActivatableComponent;
 }
 
+void ATS_Door::OpenDoor()
+{
+	if (DoorState == ETS_ActivationState::Activated)
+	{
+		return;
+	}
+	
+	DoorState = ETS_ActivationState::Activated;
+	MeshComponent->SetRelativeLocation(OpenPositionTarget->GetRelativeLocation());
+	OnDoorStateChangedDelegate.Broadcast(DoorState);
+}
+
+void ATS_Door::CloseDoor()
+{
+	
+	if (DoorState == ETS_ActivationState::Deactivated)
+	{
+		return;
+	}
+	
+	DoorState = ETS_ActivationState::Deactivated;
+	MeshComponent->SetRelativeLocation(ClosePositionTarget->GetRelativeLocation());
+	OnDoorStateChangedDelegate.Broadcast(DoorState);
+}
+
+void ATS_Door::FlipFLopDoor()
+{
+	if (DoorState == ETS_ActivationState::Deactivated)
+	{
+		OpenDoor();
+	}
+	else if (DoorState == ETS_ActivationState::Activated)
+	{
+		CloseDoor();
+	}
+}

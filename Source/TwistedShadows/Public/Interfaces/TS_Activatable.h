@@ -28,11 +28,9 @@ class TWISTEDSHADOWS_API ITS_Activatable
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	
 	UFUNCTION(BlueprintNativeEvent, blueprintCallable)
 	void ActivateActor(FActivationPayload Payload);
-
-	UFUNCTION(BlueprintNativeEvent, blueprintCallable)
-	void DeactivateActor(FActivationPayload Payload);
 
 	UFUNCTION(BlueprintNativeEvent, blueprintCallable)
 	int32 GetActivationPhase() const;

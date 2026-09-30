@@ -81,9 +81,9 @@ void ATS_GameMode_Base::HandleMatchIsWaitingToStart()
 	}
 	else
 	{
-		StartMatch(); // defensive: actor exists but player wasn't set up correctly
+		StartMatch();
 	}
-	//StartMatch();
+
 }
 
 void ATS_GameMode_Base::OnIntroSequenceFinished()

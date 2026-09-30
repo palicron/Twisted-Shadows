@@ -11,35 +11,15 @@ UTS_ActivatorComponent::UTS_ActivatorComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-void UTS_ActivatorComponent::ActivateActors(AActor* Instigator)
+void UTS_ActivatorComponent::ActivateActors(const FGameplayTagContainer ActivationTags, AActor* Instigator)
 {
 	FActivationPayload Payload;
 
 	Payload.Instigator = Instigator;
 	Payload.InstigatorActivator = GetOwner();
 	Payload.ActivationTime = GetWorld()->GetTimeSeconds();
-
-	for (FGameplayTag ActivationTag : ActivationTags)
-	{
-		Payload.ActivationTags.AddTag(ActivationTag);
-	}
-
+	Payload.ActivationTags = ActivationTags;
+	
 	OnActivationDelegate.Broadcast(Payload);
-}
-
-void UTS_ActivatorComponent::DeActivateActors(AActor* Instigator)
-{
-	FActivationPayload Payload;
-
-	Payload.Instigator = Instigator;
-	Payload.InstigatorActivator = GetOwner();
-	Payload.ActivationTime = GetWorld()->GetTimeSeconds();
-
-	for (FGameplayTag ActivationTag : DeactivationTags)
-	{
-		Payload.ActivationTags.AddTag(ActivationTag);
-	}
-
-	OnDeactivationDelegate.Broadcast(Payload);
 }
 

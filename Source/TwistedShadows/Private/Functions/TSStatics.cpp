@@ -3,6 +3,7 @@
 
 #include "Functions/TSStatics.h"
 
+#include "Definitions/ActivableSystemDefinitions.h"
 #include "GameFrameWork/TS_GameState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Subsystems/TS_LevelFlowSubsystem.h"
@@ -41,4 +42,37 @@ FLevelProgress UTSStatics::GetCurrentLevelProgress(const UObject* WorldContextOb
 	const UTS_LevelFlowSubsystem* LevelFlowSubsystem = UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UTS_LevelFlowSubsystem>();
 
 	return LevelFlowSubsystem->GetLevelProgressInfo(LevelFlowSubsystem->GetCurrentLevelID(), bFindInfo);
+}
+
+bool UTSStatics::CanBeActivate(const FActivationSettings& ActivatorSetting, const FGameplayTagContainer& RequiredTags)
+{
+	if (RequiredTags.IsEmpty())
+	{
+		return true;
+	}
+
+	if (!ActivatorSetting.RestrictTags.IsEmpty())
+	{
+		if (ActivatorSetting.bMatchAllRestrictTags && ActivatorSetting.RestrictTags.HasAll(RequiredTags))
+		{
+			return false;
+		}
+
+		if (!ActivatorSetting.bMatchAllRestrictTags && ActivatorSetting.RestrictTags.HasAny(RequiredTags))
+		{
+			return false;
+		}
+	}
+
+	if (ActivatorSetting.bMatchAllTags && ActivatorSetting.RequiredTags.HasAll(RequiredTags))
+	{
+		return true;
+	}
+
+	if (!ActivatorSetting.bMatchAllTags && ActivatorSetting.RequiredTags.HasAny(RequiredTags))
+	{
+		return true;
+	}
+
+	return false;
 }

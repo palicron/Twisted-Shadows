@@ -31,6 +31,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UTS_ActivatorComponent> ActivatorComponent;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Activation | Tags")
+	FGameplayTagContainer OverlapTags;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Activation | Tags")
+	FGameplayTagContainer EndOverlapTags;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float MinWeightToActivate;
 	
@@ -41,6 +47,8 @@ protected:
 	uint8 bUseWeightToActivate : 1;
 	
 	TArray<AActor*> OverlappingActors;
+	
+	
 	
 	virtual void BeginPlay() override;
 	

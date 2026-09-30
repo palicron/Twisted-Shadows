@@ -10,34 +10,19 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActivationStateChangedSignature, FActivationPayload, Payload);
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class TWISTEDSHADOWS_API UTS_ActivatorComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
-	
+public:
 	UTS_ActivatorComponent();
 
-protected:
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Activation")
-	TArray<FGameplayTag> ActivationTags;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Activation")
-	TArray<FGameplayTag> DeactivationTags;
-
-public:	
-	
-	UPROPERTY(BlueprintAssignable)
+public:
+	UPROPERTY(BlueprintAssignable, meta = (ActivationEvent))
 	FOnActivationStateChangedSignature OnActivationDelegate;
-	
-	UPROPERTY(BlueprintAssignable)
-	FOnActivationStateChangedSignature OnDeactivationDelegate;
-	
-	UFUNCTION(BlueprintCallable)
-	virtual void ActivateActors(AActor* Instigator = nullptr);
 
 	UFUNCTION(BlueprintCallable)
-	virtual void DeActivateActors(AActor* Instigator = nullptr);
+	virtual void ActivateActors(const FGameplayTagContainer ActivationTags , AActor* Instigator = nullptr);
 };

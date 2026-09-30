@@ -21,10 +21,11 @@ void UTS_ActivatableComponent::BeginPlay()
 		if (UTS_ActivatorComponent* ActivatorComponent = ITS_Activator::Execute_GetActivatorComponent(Activator))
 		{
 			ActivatorComponent->OnActivationDelegate.AddUniqueDynamic(this, &UTS_ActivatableComponent::ActivateActor);
-			ActivatorComponent->OnDeactivationDelegate.AddUniqueDynamic(this, &UTS_ActivatableComponent::DeactivateActor);
 		}
 	}
 }
+
+
 
 void UTS_ActivatableComponent::ActivateActor(FActivationPayload Payload)
 {
@@ -50,24 +51,20 @@ void UTS_ActivatableComponent::ActivateActor(FActivationPayload Payload)
 	ITS_Activatable::Execute_ActivateActor(GetOwner(), Payload);
 }
 
-void UTS_ActivatableComponent::DeactivateActor(FActivationPayload Payload)
+TArray<FString> UTS_ActivatableComponent::GetBindableFunctionNames() const
 {
-	for (const FGameplayTag& RequiredTag : RequiredDeactivationTags)
+	TArray<FString> Options;
+
+	for (TFieldIterator<UFunction> It(GetClass()); It; ++It)
 	{
-		if (!Payload.ActivationTags.HasTagExact(RequiredTag))
+		if (It->HasMetaData(TEXT("BindableActivation")))
 		{
-			return;
+			Options.Add(It->GetName());
 		}
 	}
-	
-	if (!GetOwner() || !GetOwner()->Implements<UTS_Activatable>())
-	{
-		//UE_LOG(LogTwistedShadows, Error, TEXT("Owner of %s is not an activatable"), *GetName());
-		return;
-	}
-	
-	ITS_Activatable::Execute_DeactivateActor(GetOwner(), Payload);
+	return Options;
 }
+
 
 
 

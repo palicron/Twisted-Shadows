@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Definitions/ActivableSystemDefinitions.h"
 #include "GameFramework/Actor.h"
 #include "Interfaces/TS_Activatable.h"
 #include "Public/Component/Activatable/TS_ActivatableComponent.h"
@@ -19,12 +20,11 @@ public:
 	
 	virtual void Tick(float DeltaTime) override;
 	
-	UFUNCTION(BlueprintCallable)
-	ETS_ActivationState GetDoorState() const { return DoorState; }
-	
 	UPROPERTY(BlueprintAssignable)
 	FOnDoorStateChangedSignature OnDoorStateChangedDelegate;
+	
 protected:
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	uint8 bCanBeActiveOnce : 1;
@@ -37,6 +37,15 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	USceneComponent* ClosePositionTarget;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components|Tags")
+	FActivationSettings OpenTag;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components|Tags")
+	FActivationSettings CloseTag;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components|Tags")
+	FActivationSettings FlipFlopTag;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	uint8 bStartOpen : 1;
@@ -51,10 +60,20 @@ protected:
 
 	ETS_ActivationState DoorState;
 
+	UFUNCTION(BlueprintCallable)
+	void OpenDoor();
+	
+	UFUNCTION(BlueprintCallable)
+	void CloseDoor();
+	
+	UFUNCTION(BlueprintCallable)
+	void FlipFLopDoor();
+	
 #pragma region ITS_Activatable
 	
+public:
+	
 	virtual void ActivateActor_Implementation(FActivationPayload Payload) override;
-	virtual void DeactivateActor_Implementation(FActivationPayload Payload) override;
 	virtual ETS_ActivationState GetActivationState_Implementation() const override;
 	virtual int32 GetActivationPhase_Implementation() const override;
 	virtual UTS_ActivatableComponent* GetActivatableComponent_Implementation() const override;
