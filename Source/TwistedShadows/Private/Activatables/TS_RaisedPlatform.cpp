@@ -3,7 +3,9 @@
 
 #include "Activatables/TS_RaisedPlatform.h"
 
+#include "Component/Activatable/TS_ActivatableComponent.h"
 #include "Components/SplineComponent.h"
+#include "Functions/TSStatics.h"
 
 // Sets default values
 ATS_RaisedPlatform::ATS_RaisedPlatform()
@@ -19,9 +21,13 @@ ATS_RaisedPlatform::ATS_RaisedPlatform()
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	MeshComponent->SetupAttachment(RaisedPlatformRoot);
 	
+	ActivatableComponent = CreateDefaultSubobject<UTS_ActivatableComponent>(TEXT("Activatable Component"));
+	
 	StartSplineIndex = 0;
 	CurrentSplineIndex = 0;
 	LastSplineIndex = 0;
+	bCanBeActiveOnce = false;
+
 }
 
 void ATS_RaisedPlatform::BeginPlay()
@@ -61,12 +67,22 @@ void ATS_RaisedPlatform::MoveToNextSplinePoint()
 		//TODO mange return case
 		return;
 	}
+	CurrentSplineIndex++;
 	
+	MoveToSplinePoint(CurrentSplineIndex);
 	
 }
 
 void ATS_RaisedPlatform::MoveToPreviousSplinePoint()
 {
+	if (CurrentSplineIndex - 1 < 0)
+	{
+		//TODO mange return case
+		return;
+	}
+	CurrentSplineIndex--;
+
+	MoveToSplinePoint(CurrentSplineIndex);
 }
 
 void ATS_RaisedPlatform::MoveToSplinePoint(int32 SplineIndex)
@@ -86,14 +102,36 @@ void ATS_RaisedPlatform::MoveToLastSplinePoint()
 {
 }
 
+void ATS_RaisedPlatform::FlipFlopPlatform()
+{
+}
+
 void ATS_RaisedPlatform::ActivateActor_Implementation(FActivationPayload Payload)
 {
-	ITS_Activatable::ActivateActor_Implementation(Payload);
+	
+	if (bCanBeActiveOnce && RaisedPlatformState == ETS_ActivationState::Activated)
+	{
+		return;
+	}
+	
+	if (UTSStatics::CanBeActivate(RaisedTag,Payload.ActivationTags))
+	{
+		MoveToNextSplinePoint();
+		return;
+	}
+	
+	if (UTSStatics::CanBeActivate(LowerTag,Payload.ActivationTags))
+	{
+		MoveToPreviousSplinePoint();
+		return;
+	}
+	
+	
 }
 
 ETS_ActivationState ATS_RaisedPlatform::GetActivationState_Implementation() const
 {
-	return ITS_Activatable::GetActivationState_Implementation();
+	return RaisedPlatformState;
 }
 
 int32 ATS_RaisedPlatform::GetActivationPhase_Implementation() const
@@ -103,7 +141,7 @@ int32 ATS_RaisedPlatform::GetActivationPhase_Implementation() const
 
 UTS_ActivatableComponent* ATS_RaisedPlatform::GetActivatableComponent_Implementation() const
 {
-	return ITS_Activatable::GetActivatableComponent_Implementation();
+	return ActivatableComponent;
 }
 
 

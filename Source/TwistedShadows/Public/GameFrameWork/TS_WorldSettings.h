@@ -19,6 +19,9 @@ public:
 	int32 LevelID;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 StateID;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	uint8 bIsMenu : 1;
 	
 	ATS_WorldSettings();

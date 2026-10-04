@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Definitions/ActivableSystemDefinitions.h"
 #include "GameFramework/Actor.h"
 #include "Interfaces/TS_Activatable.h"
 #include "TS_RaisedPlatform.generated.h"
@@ -26,11 +27,22 @@ protected:
 	TObjectPtr<USplineComponent> SplineComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UTS_ActivatableComponent> ActivatableComponent;
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* MeshComponent;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	USceneComponent* RaisedPlatformRoot;
 	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components|Tags")
+	FActivationSettings RaisedTag;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components|Tags")
+	FActivationSettings LowerTag;
+
 	ETS_ActivationState RaisedPlatformState;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components|Spline")
@@ -42,15 +54,25 @@ protected:
 	
 	int32 SplinePointsCount;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components|Config")
+	uint8 bCanBeActiveOnce :1 ;
+	
 	virtual void BeginPlay() override;
 	
+	UFUNCTION(blueprintCallable)
 	virtual void MoveToNextSplinePoint();
 	
+	UFUNCTION(blueprintCallable)
 	virtual void MoveToPreviousSplinePoint();
 	
+	UFUNCTION(blueprintCallable)
 	virtual void MoveToSplinePoint(int32 SplineIndex);
 	
+	UFUNCTION(blueprintCallable)
 	virtual void MoveToLastSplinePoint();
+	
+	UFUNCTION(blueprintCallable)
+	void FlipFlopPlatform();
 
 public:
 #pragma region ITS_Activatable

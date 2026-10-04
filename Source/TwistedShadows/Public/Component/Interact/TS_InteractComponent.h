@@ -62,8 +62,6 @@ protected:
 	
 	void DeactivateInteraction();
 	
-
-	
 	void OnInteractableOverlap();
 	
 	void OnInteractableEndOverlap();

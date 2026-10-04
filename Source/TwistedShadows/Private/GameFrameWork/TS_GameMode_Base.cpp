@@ -71,6 +71,7 @@ void ATS_GameMode_Base::HandleMatchIsWaitingToStart()
 	if (!IntroSequenceActor)
 	{
 		StartMatch();
+		return;
 	}
 	
 	if (ULevelSequencePlayer* Sequencer = IntroSequenceActor->GetSequencePlayer())
