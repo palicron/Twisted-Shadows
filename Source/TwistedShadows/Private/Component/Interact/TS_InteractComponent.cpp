@@ -33,6 +33,8 @@ void UTS_InteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
+
+
 void UTS_InteractComponent::ActivateInteraction()
 {
 	if (bIsActivate)
@@ -52,16 +54,49 @@ void UTS_InteractComponent::DeactivateInteraction()
 	StopInteractableTrace();
 }
 
-void UTS_InteractComponent::ActivateInteract() const
+void UTS_InteractComponent::StartedActivateInteract() const
 {
 	if (!bIsActivate || !InteractableActorPtr.IsValid())
 	{
 		return;
 	}
+
+	FInteractPayload PayLoad;
+	PayLoad.Type = ETS_InteractionType::Started;
 	
-	ITS_Interactable::Execute_ActivateInteractable(InteractableActorPtr.Get());
+	ITS_Interactable::Execute_ActivateInteractable(InteractableActorPtr.Get(), PayLoad);
 	
 }
+
+void UTS_InteractComponent::OngoingActivateInteract(const float PressTime) const
+{
+	if (!bIsActivate || !InteractableActorPtr.IsValid())
+	{
+		return;
+	}
+
+	FInteractPayload PayLoad;
+	PayLoad.Type = ETS_InteractionType::Ongoing;
+	PayLoad.PressTime = PressTime;
+	
+	ITS_Interactable::Execute_ActivateInteractable(InteractableActorPtr.Get(), PayLoad);
+	
+}
+
+void UTS_InteractComponent::EndActivateInteract() const
+{
+	if (!bIsActivate || !InteractableActorPtr.IsValid())
+	{
+		return;
+	}
+
+	FInteractPayload PayLoad;
+	PayLoad.Type = ETS_InteractionType::Ended;
+	
+	ITS_Interactable::Execute_ActivateInteractable(InteractableActorPtr.Get(), PayLoad);
+	
+}
+
 
 void UTS_InteractComponent::OnInteractableOverlap()
 {

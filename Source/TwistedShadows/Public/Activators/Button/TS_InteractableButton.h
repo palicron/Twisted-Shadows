@@ -36,7 +36,7 @@ public:
 	
 	virtual UTS_ActivatorComponent* GetActivatorComponent_Implementation() const override;
 	
-	virtual void ActivateInteractable_Implementation() override;
+	virtual void ActivateInteractable_Implementation(const FInteractPayload Payload) override;
 	
 #pragma endregion ITS_Activatable
 };

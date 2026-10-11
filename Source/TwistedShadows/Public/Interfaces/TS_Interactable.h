@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Definitions/GeneralDefinitions.h"
 #include "UObject/Interface.h"
 #include "TS_Interactable.generated.h"
 
@@ -27,7 +28,6 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnInteractDeselect();
 	
-	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ActivateInteractable();
+	void ActivateInteractable(const FInteractPayload Payload);
 };

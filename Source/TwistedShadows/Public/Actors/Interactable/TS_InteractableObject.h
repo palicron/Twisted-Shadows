@@ -25,6 +25,6 @@ protected:
 	
 	virtual void OnInteractDeselect_Implementation() override;
 	
-	virtual void ActivateInteractable_Implementation() override;
+	virtual void ActivateInteractable_Implementation(const FInteractPayload Payload) override;
 	
 };

@@ -24,6 +24,15 @@ enum class ETS_ShadowCastingState : uint8
 	Block
 };
 
+UENUM(BlueprintType)
+enum class ETS_InteractionType : uint8
+{
+	None,
+	Started,
+	Ongoing,
+	Ended
+};
+
 USTRUCT(BlueprintType)
 struct FActivationPayload
 {
@@ -107,6 +116,21 @@ struct FLevelProgress
 	};
 };
 
+USTRUCT(BlueprintType)
+struct FInteractPayload
+{
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	ETS_InteractionType Type;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float PressTime;
+
+	FInteractPayload() : Type(ETS_InteractionType::Started), PressTime(0.f)
+	{
+	};
+};
 
 
 

@@ -38,7 +38,9 @@ void ATS_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	{
 		
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATS_PlayerCharacter::Move);
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ATS_PlayerCharacter::Interact);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &ATS_PlayerCharacter::StartedInteract);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ATS_PlayerCharacter::OngoingInteract);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &ATS_PlayerCharacter::EndInteract);
 	}
 
 }
@@ -78,10 +80,22 @@ void ATS_PlayerCharacter::Move(const FInputActionValue& Value)
 	AddMovementInput(CurrentRightVector, InputVector.Y);
 }
 
-void ATS_PlayerCharacter::Interact(const FInputActionValue& Value)
+
+void ATS_PlayerCharacter::StartedInteract(const FInputActionValue& Value)
 {
-	PlayerInteractComponent->ActivateInteract();
+	PlayerInteractComponent->StartedActivateInteract();
 }
+
+void ATS_PlayerCharacter::OngoingInteract(const FInputActionInstance& Value)
+{
+	PlayerInteractComponent->OngoingActivateInteract(Value.GetElapsedTime());
+}
+
+void ATS_PlayerCharacter::EndInteract(const FInputActionValue& Value)
+{
+	PlayerInteractComponent->EndActivateInteract();
+}
+
 
 void ATS_PlayerCharacter::OnCameraChangeCallback(ATS_CameraActor* NewCamera)
 {

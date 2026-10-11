@@ -27,7 +27,13 @@ public:
 	void SetIsInteract(const bool InbIsActivate) { bIsActivate = InbIsActivate; };
 	
 	UFUNCTION(BlueprintCallable)
-	void ActivateInteract() const;
+	void StartedActivateInteract() const;
+	
+	UFUNCTION(BlueprintCallable)
+	void OngoingActivateInteract(const float PressTime) const;
+	
+	UFUNCTION(BlueprintCallable)
+	void EndActivateInteract() const;
 protected:
 	
 	TWeakObjectPtr<AActor> Owner;

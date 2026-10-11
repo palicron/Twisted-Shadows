@@ -35,7 +35,7 @@ void ATS_InteractableObject::OnInteractDeselect_Implementation()
 	ITS_Interactable::OnInteractDeselect_Implementation();
 }
 
-void ATS_InteractableObject::ActivateInteractable_Implementation()
+void ATS_InteractableObject::ActivateInteractable_Implementation(const FInteractPayload Payload)
 {
-	ITS_Interactable::ActivateInteractable_Implementation();
+	ITS_Interactable::ActivateInteractable_Implementation(Payload);
 }

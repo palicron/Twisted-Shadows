@@ -19,7 +19,7 @@ UTS_ActivatorComponent* ATS_InteractableButton::GetActivatorComponent_Implementa
 	return ActivatorComponent;
 }
 
-void ATS_InteractableButton::ActivateInteractable_Implementation()
+void ATS_InteractableButton::ActivateInteractable_Implementation(const FInteractPayload Payload)
 {
 	ActivatorComponent->ActivateActors(OverlapTags);
 	///TODO: Player send constan check shoudl limt this here
