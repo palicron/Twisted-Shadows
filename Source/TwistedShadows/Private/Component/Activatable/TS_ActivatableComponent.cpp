@@ -25,8 +25,6 @@ void UTS_ActivatableComponent::BeginPlay()
 	}
 }
 
-
-
 void UTS_ActivatableComponent::ActivateActor(FActivationPayload Payload)
 {
 	if (!bCanBeActivate)

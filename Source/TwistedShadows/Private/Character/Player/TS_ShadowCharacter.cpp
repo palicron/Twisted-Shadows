@@ -29,6 +29,8 @@ void ATS_ShadowCharacter::DestroyShadow()
 	Destroy();
 }
 
+
+
 void ATS_ShadowCharacter::CheckShadowLife()
 {
 	//@TODO create UI controller and update it 
@@ -43,4 +45,9 @@ void ATS_ShadowCharacter::CheckShadowLife()
 	{
 		DestroyShadow();
 	}
+}
+
+void ATS_ShadowCharacter::OnGoalTouch()
+{
+	DestroyShadow();
 }

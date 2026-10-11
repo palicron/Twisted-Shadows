@@ -35,6 +35,7 @@ void ATS_GameMode_Base::EndLevel(ACharacter* EndPlayer)
 	}
 
 	//TODO THIS SHOULD BE IN THE PC ASS A HOLD and getting the new WIDget to get foce
+	PC->FlushPressedKeys();
 	PC->SetInputMode(FInputModeUIOnly());
 	PC->SetShowMouseCursor(true);
 

@@ -3,6 +3,7 @@
 
 #include "Actors/Goal/TS_GoalActor.h"
 
+#include "Character/Player/TS_PlayerCharacter.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFrameWork/TS_GameMode_Base.h"
@@ -56,12 +57,21 @@ void ATS_GoalActor::OnDetectorBeginOverlap(UPrimitiveComponent* OverlappedCompon
 		return;
 	}
 	
-	GameModePtr->EndLevel(Cast<ACharacter>(OtherActor));
+	ATS_PlayerCharacter*  Character =  Cast<ATS_PlayerCharacter>(OtherActor);
 	
-	if(GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Goal ACtor"));
+	if (!Character )
+	{
+		return;
+	}
 	
+	Character->OnGoalTouch();
 	
+	if (Character->GetCharacterClass() != ETS_CharacterClass::Caster)
+	{
+		return;
+	}
+	
+	GameModePtr->EndLevel(Character);
 	
 }
 

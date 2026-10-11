@@ -23,4 +23,6 @@ public:
 	UFUNCTION(blueprintCallable, Category = "Caster | Shadow")
 	void SetCasterShadow(const bool bActiveShadow);
 	
+	virtual void OnGoalTouch() override;
+	
 };

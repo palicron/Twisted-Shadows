@@ -47,9 +47,6 @@ protected:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Activation|Activators", meta = (MustImplement = "/Script/TwistedShadows.TS_Activator"))
 	TArray<AActor*> ActorActivators;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Activation|Activators")
-	TMap<AActor*,FBindingStruct> ActivatorMap;
-	
 	virtual void BeginPlay() override;
 	
 	UFUNCTION()

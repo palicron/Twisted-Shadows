@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
+#include "Definitions/PlayerDefinitions.h"
 #include "GameFramework/Character.h"
 #include "TS_PlayerCharacter.generated.h"
 
@@ -26,7 +27,12 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	virtual void PossessedBy(AController* NewController) override;
-
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void OnGoalTouch();
+	
+	UFUNCTION(BlueprintCallable)
+	ETS_CharacterClass GetCharacterClass() const { return CharacterClass;}
 
 protected:
 	
@@ -48,6 +54,9 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly)
 	FVector CurrentRightVector;
+
+	UPROPERTY(EditDefaultsOnly, blueprintReadOnly, Category= "Character | Type")
+	ETS_CharacterClass CharacterClass;
 	
 	virtual void BeginPlay() override;
 	 

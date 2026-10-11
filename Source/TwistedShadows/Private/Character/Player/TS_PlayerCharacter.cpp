@@ -65,6 +65,10 @@ void ATS_PlayerCharacter::PossessedBy(AController* NewController)
 	CurrentRightVector = CurrentCamera->GetCameraRightVector();
 }
 
+void ATS_PlayerCharacter::OnGoalTouch()
+{
+}
+
 
 void ATS_PlayerCharacter::Move(const FInputActionValue& Value)
 {

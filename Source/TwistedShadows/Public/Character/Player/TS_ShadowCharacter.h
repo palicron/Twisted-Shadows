@@ -29,6 +29,8 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnShadowDestroySignature OnShadowDestroyDelegate;
+	
+	virtual void OnGoalTouch() override;
 protected:
 	
 	FTimerHandle ShadowLifeTimerHandle;
