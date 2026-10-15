@@ -15,6 +15,7 @@ ATS_PlayerCharacter::ATS_PlayerCharacter()
 	
 	PlayerInteractComponent = CreateDefaultSubobject<UTS_InteractComponent>("Player Interact Component");
 
+	CurrentMovementType = ETS_MovementType::Normal;
 }
 
 
@@ -71,9 +72,56 @@ void ATS_PlayerCharacter::OnGoalTouch()
 {
 }
 
+void ATS_PlayerCharacter::StartGrabbingActor(AActor* ActorToGrab, USceneComponent* GrabbingPoint, const ETS_MovementType MovementType)
+{
+	
+	if (!ActorToGrab || !GrabbingPoint)
+	{
+		return;
+	}
+	GrabbedActor = ActorToGrab;
+	StartPosition = GrabbingPoint->GetComponentLocation();
+	StartPosition.Z = GetActorLocation().Z;
+	CurrentMovementType = MovementType;
+	
+	MoveToGrabPoint(GrabbingPoint);
+}
+
+void ATS_PlayerCharacter::MoveToGrabPoint(USceneComponent* GrabbingPoint)
+{
+	FTimerDelegate MoveDelegate;
+	MoveDelegate.BindWeakLambda(this,[&]()
+	{
+		const FVector NewPosition = FMath::VInterpTo(StartPosition,GetActorLocation(),0.1f,0.1f);
+		SetActorLocation(NewPosition);
+		
+		if (FVector::Distance(StartPosition,GetActorLocation()) < 10.f)
+		{
+			SetActorLocation(StartPosition);
+			GetWorld()->GetTimerManager().ClearTimer(GrabbingTimerHandle);
+			if(GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Some debug message!"));	
+		}
+	});
+	
+	GetWorld()->GetTimerManager().SetTimer(GrabbingTimerHandle,MoveDelegate,0.1f,true);
+
+}
+
+void ATS_PlayerCharacter::EndeGrabbingActor()
+{
+	CurrentMovementType = ETS_MovementType::Normal;
+	GrabbedActor = nullptr;
+	
+}
+
 
 void ATS_PlayerCharacter::Move(const FInputActionValue& Value)
 {
+	if (CurrentMovementType != ETS_MovementType::Normal)
+	{
+		return;
+	}
 	FVector2D InputVector = Value.Get<FVector2D>();
 	
 	AddMovementInput(CurrentForwardVector, InputVector.X);

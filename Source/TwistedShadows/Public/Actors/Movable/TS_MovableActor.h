@@ -17,15 +17,19 @@ public:
 	ATS_MovableActor();
 
 	virtual void Tick(float DeltaTime) override;
-	
 
-	
 protected:
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Snap")
+	TArray<USceneComponent*> SnapComponents;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Mesh")
 	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
 	
 	virtual void BeginPlay() override;
-
-
+	
+	virtual void ActivateInteractable_Implementation(const FInteractPayload Payload) override;
+	
+	USceneComponent* GetNearestSnapComponent(const FVector Location);
 
 };

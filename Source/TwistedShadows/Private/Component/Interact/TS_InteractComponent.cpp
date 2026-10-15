@@ -63,7 +63,11 @@ void UTS_InteractComponent::StartedActivateInteract() const
 
 	FInteractPayload PayLoad;
 	PayLoad.Type = ETS_InteractionType::Started;
-	
+	if (Owner.IsValid())
+	{
+		PayLoad.InstigatorCharacter = Owner.Get();
+	}
+
 	ITS_Interactable::Execute_ActivateInteractable(InteractableActorPtr.Get(), PayLoad);
 	
 }
@@ -92,7 +96,10 @@ void UTS_InteractComponent::EndActivateInteract() const
 
 	FInteractPayload PayLoad;
 	PayLoad.Type = ETS_InteractionType::Ended;
-	
+	if (Owner.IsValid())
+	{
+		PayLoad.InstigatorCharacter = Owner.Get();
+	}
 	ITS_Interactable::Execute_ActivateInteractable(InteractableActorPtr.Get(), PayLoad);
 	
 }

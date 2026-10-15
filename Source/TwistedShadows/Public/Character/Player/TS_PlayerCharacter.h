@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
+#include "Definitions/GeneralDefinitions.h"
 #include "Definitions/PlayerDefinitions.h"
 #include "GameFramework/Character.h"
 #include "TS_PlayerCharacter.generated.h"
@@ -33,6 +34,14 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	ETS_CharacterClass GetCharacterClass() const { return CharacterClass;}
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void StartGrabbingActor(AActor* ActorToGrab, USceneComponent* GrabbingPoint,const ETS_MovementType MovementType);
+	
+	virtual void MoveToGrabPoint(USceneComponent* GrabbingPoint);
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void EndeGrabbingActor();
 
 protected:
 	
@@ -49,14 +58,22 @@ protected:
 	
 	TWeakObjectPtr<ATS_CameraActor> CurrentCamera;
 	
+	TWeakObjectPtr<AActor> GrabbedActor;
+	FVector StartPosition;
+	
 	UPROPERTY(BlueprintReadOnly)
 	FVector CurrentForwardVector;
 	
 	UPROPERTY(BlueprintReadOnly)
 	FVector CurrentRightVector;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite , Category = "Movement")
+	ETS_MovementType CurrentMovementType;
 
 	UPROPERTY(EditDefaultsOnly, blueprintReadOnly, Category= "Character | Type")
 	ETS_CharacterClass CharacterClass;
+	
+	FTimerHandle GrabbingTimerHandle;
 	
 	virtual void BeginPlay() override;
 	 

@@ -33,6 +33,14 @@ enum class ETS_InteractionType : uint8
 	Ended
 };
 
+UENUM(BlueprintType)
+enum class ETS_MovementType : uint8
+{
+	Normal,  /* Normal movement*/
+	Forward, /* Can just move in forward direction*/
+	Linear, /* Can move Forward a backward of the forwar direction*/
+};
+
 USTRUCT(BlueprintType)
 struct FActivationPayload
 {
@@ -123,11 +131,14 @@ struct FInteractPayload
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ETS_InteractionType Type;
+	
+	UPROPERTY(BlueprintReadOnly)
+	AActor* InstigatorCharacter;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float PressTime;
 
-	FInteractPayload() : Type(ETS_InteractionType::Started), PressTime(0.f)
+	FInteractPayload() : Type(ETS_InteractionType::Started), InstigatorCharacter(nullptr), PressTime(0.f)
 	{
 	};
 };
