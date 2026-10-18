@@ -30,6 +30,7 @@ ATS_MovableActor::ATS_MovableActor()
 	SnapComponent3->SetupAttachment(RootComponent);
 	SnapComponents.Add(SnapComponent3);
 
+	MovementType = ETS_MovementType::Forward;
 }
 
 // Called when the game starts or when spawned
@@ -50,7 +51,7 @@ void ATS_MovableActor::ActivateInteractable_Implementation(const FInteractPayloa
 				DrawDebugSphere(GetWorld(), Nearest->GetComponentLocation(), 100.0f, 10, FColor::Green, false, 10.0f);
 				
 				//TODO check for the movment tipe
-				Player->StartGrabbingActor(this,Nearest,ETS_MovementType::Forward);
+				Player->StartGrabbingActor(this,Nearest,MovementType);
 			}
 			
 		}

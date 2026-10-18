@@ -25,7 +25,10 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Mesh")
 	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Movement")
+	ETS_MovementType MovementType;
+
 	virtual void BeginPlay() override;
 	
 	virtual void ActivateInteractable_Implementation(const FInteractPayload Payload) override;

@@ -73,3 +73,10 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Claude Code
+.claude/
+.mcp.json
+
+# Graphify code graph output
+graphify-out/
