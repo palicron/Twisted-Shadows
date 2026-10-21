@@ -52,6 +52,26 @@ Created a modular interaction system to handle various puzzle elements.
 * **Phase 2:** Implement advanced environmental logic (light/shadow puzzles).
 * **Phase 3:** Full UI implementation using the MVVM pattern.
 
+---
+
+## 🤖 AI Usage
+
+This is my personal working and learning project. AI is used only as a support tool to help me develop faster:
+
+* **Consulting:** questions about C++, Unreal Engine 5 and architecture, and code reviews.
+* **Testing:** automated tests (`Source/TwistedShadows/Private/AutomationTest/`).
+* **Gameplay code:** all gameplay and system code is written by me.
+
+### Placeholder assets
+Some placeholder assets (3D models, textures, materials, UI images, music and sound effects) were generated with AI **only as placeholders**, so I can build and test the game before final art and audio exist. They live in the `Content/PlaceHolder/` folder.
+
+If this game is ever released, these assets will be replaced with assets made by me or created by someone else for the game.
+
+### Third-party assets
+* **Fonts:** from Google Fonts under the SIL Open Font License (e.g. Almendra SC in `Content/Fonds/`). They are not AI-generated; the license text must ship with any release.
+
+---
+
 > [!NOTE]
 > This project is a work-in-progress focused on **scalable systems** and **clean C++ architecture**.
 
