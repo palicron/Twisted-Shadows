@@ -34,10 +34,10 @@ public:
 protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category = "Button")
-	float OverrideWidth = 70.f;
+	float OverrideWidth = 512.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category = "Button")
-	float OverrideHeight = 10.f;
+	float OverrideHeight = 160.f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = true), Category = "Button")
 	FText ButtonLabel;
